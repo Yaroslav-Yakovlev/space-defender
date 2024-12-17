@@ -1,0 +1,37 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Webpack
+dist/
+build/
+.cache/
+*.cache
+
+# misc
+.env
+.env.local
+.env.*.local
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+*.bak
+*.tmp
