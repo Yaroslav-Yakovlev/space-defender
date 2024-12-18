@@ -1,7 +1,7 @@
 import { Application, Assets, Sprite } from 'pixi.js'
 import { CONFIG } from './config.js'
-import { assetsLoader } from '../assets/assetsLoader'
-import { Ship } from '../components/Ship'
+import { assetsLoader } from '../assets/assetsLoader.js'
+import { Ship } from '../components/Ship.js'
 
 export class Game {
   constructor () {
@@ -39,6 +39,7 @@ export class Game {
     this.ship = new Ship(this.app)
     this.ship.init()
   }
+
 }
 
 (async () => {
