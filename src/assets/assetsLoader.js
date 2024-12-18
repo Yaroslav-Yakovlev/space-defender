@@ -1,9 +1,11 @@
 import { Assets } from 'pixi.js'
-import background from '../assets/black.png'
+import background from './images/black.png'
+import ship from './images/playerShip1_orange.png'
 
 export async function assetsLoader () {
   const assets = [
-    { name: 'background', src: background }
+    { name: 'background', src: background },
+    { name: 'ship', src: ship }
   ]
 
   try {

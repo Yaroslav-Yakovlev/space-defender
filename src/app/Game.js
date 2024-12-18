@@ -1,6 +1,7 @@
 import { Application, Assets, Sprite } from 'pixi.js'
 import { CONFIG } from './config.js'
 import { assetsLoader } from '../assets/assetsLoader'
+import { Ship } from '../components/Ship'
 
 export class Game {
   constructor () {
@@ -21,6 +22,7 @@ export class Game {
     await assetsLoader()
 
     this.loadBackground()
+    this.loadShip()
   }
 
   loadBackground () {
@@ -31,6 +33,11 @@ export class Game {
     background.height = CONFIG.screen.height
 
     this.app.stage.addChild(background)
+  }
+
+  loadShip () {
+    this.ship = new Ship(this.app)
+    this.ship.init()
   }
 }
 
