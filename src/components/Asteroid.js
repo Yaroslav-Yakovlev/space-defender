@@ -4,38 +4,46 @@ import { CONFIG } from '../app/config.js'
 export class Asteroid {
   constructor (app) {
     this.app = app
-    this.asteroid = null
-    this.speed = Math.random() * (CONFIG.asteroidParams.maxSpeed - CONFIG.asteroidParams.minSpeed) + CONFIG.asteroidParams.minSpeed
-    this.rotationSpeed = Math.random() * 0.1 - 0.03;
-  }
+    this.rotationSpeed = CONFIG.asteroidParams.rotationSpeed
+    this.speed = CONFIG.asteroidParams.getAsteroidSpeed()
 
-  init() {
-    const asteroidTexture = Assets.get(CONFIG.assets.asteroid)
-    this.asteroid = new Sprite(asteroidTexture)
+    this.asteroidTexture = Assets.get(CONFIG.assets.asteroid)
+    this.sprite = new Sprite(this.asteroidTexture)
+    this.sprite.width = CONFIG.asteroidParams.width
+    this.sprite.height = CONFIG.asteroidParams.height
+    this.sprite.x = Math.random() * (CONFIG.screen.width - this.sprite.width)
+    this.sprite.y = -this.sprite.height
+    this.sprite.anchor.set(0.5)
 
-    this.asteroid.width = CONFIG.asteroidParams.width
-    this.asteroid.height = CONFIG.asteroidParams.height
-    this.asteroid.x = Math.random() * (CONFIG.screen.height - this.asteroid.width)
-    this.asteroid.y = -this.asteroid.height
-    this.asteroid.anchor.set(0.5)
-    this.app.stage.addChild(this.asteroid)
-
-    this.app.ticker.add(this.update, this)
+    this.app.stage.addChild(this.sprite)
   }
 
   update() {
-    this.asteroid.y += this.speed
-    this.asteroid.rotation += this.rotationSpeed
+    if (!this.sprite) return
+    this.sprite.y += this.speed / 2
+    this.sprite.rotation += this.rotationSpeed
 
-    if(this.asteroid.y > this.app.screen.height + this.asteroid.height) {
+    if(this.sprite.y > this.app.screen.height + this.sprite.height) {
       this.destroy()
     }
   }
 
+  getAsteroidCords() {
+    if (!this.sprite) return
+    const bounds = this.sprite.getBounds()
+
+    return {
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height
+    }
+  }
+
   destroy() {
-    this.app.ticker.remove(this.update, this)
-    this.app.stage.removeChild(this.asteroid)
-    this.asteroid.destroy()
-    this.asteroid = null
+    // this.app.ticker.remove(this.update, this)
+    this.app.stage.removeChild(this.sprite)
+    this.sprite.destroy()
+    this.sprite = null
   }
 }

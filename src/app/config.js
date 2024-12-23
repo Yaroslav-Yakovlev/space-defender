@@ -15,19 +15,25 @@ export const CONFIG = {
   shipParams: {
     width: 70,
     height: 70,
-    speed: 10,
-    bulletsAmount: 10
+    speed: 7,
+    bulletsAmount: 10,
+    maxRotation: 0.2,
+    rotationSpeed: 0.05
   },
   bullet: {
     height: 8,
     width: 16,
     color: 0x05bff2,
-    speed: 10
+    speed: 2
   },
   asteroidParams: {
     height: 80,
     width: 80,
     minSpeed: 2,
-    maxSpeed: 6
+    maxSpeed: 5,
+    rotationSpeed: Math.random() * 0.1 - 0.03,
+    getAsteroidSpeed() {
+      return Math.random() * (this.maxSpeed - this.minSpeed) + this.minSpeed
+    }
   }
 }
