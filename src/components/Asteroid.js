@@ -1,5 +1,6 @@
 import { Assets, Sprite } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
+import { fadeOutAndRemoveSprite } from '../app/utils.js'
 
 export class Asteroid {
   constructor (app) {
@@ -41,9 +42,11 @@ export class Asteroid {
   }
 
   destroy() {
-    // this.app.ticker.remove(this.update, this)
-    this.app.stage.removeChild(this.sprite)
-    this.sprite.destroy()
+    if(!this.sprite) return
+
+    this.sprite.texture = Assets.get(CONFIG.assets.destroyedAsteroid)
+
+    fadeOutAndRemoveSprite(this.sprite, this.app)
     this.sprite = null
   }
 }
