@@ -6,15 +6,17 @@ import { Asteroid } from '../components/Asteroid'
 
 export class Game {
   constructor () {
-    this.app = null
     this.asteroids = []
+    this.bullets = []
     this.asteroidsInterval = 2000
     this.asteroidAmound = 10
+    this.bulletsAmount = 10
+    this.shipX = CONFIG.screen.width / 2
+    this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
   }
 
   async init () {
     this.app = new Application()
-
     await this.app.init({
       width: CONFIG.screen.width,
       height: CONFIG.screen.height,
@@ -27,8 +29,9 @@ export class Game {
 
     this.loadBackground()
     this.loadShip()
-    this.loadAsteroids()
     this.asteroidSpawner()
+    this.checkCollisions()
+    this.app.ticker.add(() => this.gameLoop())
   }
 
   loadBackground () {
@@ -42,23 +45,73 @@ export class Game {
   }
 
   loadShip () {
-    this.ship = new Ship(this.app)
-    this.ship.init()
+    this.ship = new Ship(this.app, this.shipX, this.shipY, this)
   }
 
-  loadAsteroids() {
-    this.asteroid = new Asteroid(this.app)
-    this.asteroid.init()
-  }
-
-  asteroidSpawner() {
+  asteroidSpawner () {
     setInterval(() => {
-      if(this.asteroids.length + 1 < this.asteroidAmound) {
-        const asteroid = new Asteroid(this.app)
-        asteroid.init()
-        this.asteroids.push(asteroid)
+      if (this.asteroids.length + 1 < this.asteroidAmound) {
+        this.asteroid = new Asteroid(this.app)
+        this.asteroids.push(this.asteroid)
       }
     }, this.asteroidsInterval)
+  }
+
+  addBullets (bullet) {
+    this.bullets.push(bullet)
+  }
+
+  isColliding (sprite1, sprite2) {
+    if (!sprite1 || !sprite2) return false
+
+    const bounds1 = sprite1
+    const bounds2 = sprite2
+
+    return (
+      bounds1.x < bounds2.x + bounds2.width &&
+      bounds1.x + bounds2.width > bounds2.x &&
+      bounds1.y < bounds2.y + bounds2.height &&
+      bounds1.y + bounds1.height > bounds2.y
+    )
+  }
+
+  checkCollisions () {
+    this.bullets.forEach((bullet) => {
+      this.asteroids.forEach((asteroid) => {
+        if (this.isColliding(bullet.getBulletCords(),
+          asteroid.getAsteroidCords())) {
+          bullet.destroy()
+          asteroid.destroy()
+        }
+      })
+    })
+  }
+
+  checkShipCollision () {
+    this.asteroids.forEach((asteroid) => {
+      if (this.isColliding(this.ship.getShipCords(),
+        asteroid.getAsteroidCords())) {
+        this.ship.destroy()
+        this.endGame()
+      }
+    })
+  }
+
+  endGame () {
+    setTimeout(() => {
+      alert('Game Over, You Lose')
+      this.app.ticker.stop()
+    }, 1000)
+  }
+
+  gameLoop () {
+    this.ship.update()
+    this.asteroids.forEach(a => a.update())
+    this.ship.update()
+    this.bullets.forEach((b) => b.update())
+
+    this.checkCollisions()
+    this.checkShipCollision()
   }
 }
 
@@ -66,3 +119,4 @@ export class Game {
   const game = new Game()
   await game.init()
 })()
+

@@ -3,33 +3,25 @@ import { CONFIG } from '../app/config.js'
 import { Bullet } from './Bullet.js'
 
 export class Ship {
-  constructor (app) {
+  constructor (app, x, y, game) {
     this.app = app
-    this.ship = null
+    this.game = game
     this.moveLeft = false
     this.moveRight = false
     this.speed = CONFIG.shipParams.speed
-    this.height = CONFIG.shipParams.height
-    this.width = CONFIG.shipParams.width
-    this.bulletsAmount = CONFIG.shipParams.bulletsAmount
-    this.bullets = []
     this.canShot = true
-  }
 
-  init () {
     const shipTexture = Assets.get(CONFIG.assets.ship)
-    this.ship = new Sprite(shipTexture)
+    this.sprite = new Sprite(shipTexture)
 
-    this.ship.width = CONFIG.shipParams.width
-    this.ship.height = CONFIG.shipParams.height
-    this.ship.x = (CONFIG.screen.width - this.ship.width) / 2
-    this.ship.y = CONFIG.screen.height - this.ship.height - 10
-
-    this.app.stage.addChild(this.ship)
+    this.sprite.width = CONFIG.shipParams.width
+    this.sprite.height = CONFIG.shipParams.height
+    this.sprite.x = x
+    this.sprite.y = y
+    this.sprite.anchor.set(0.5)
+    this.app.stage.addChild(this.sprite)
 
     this.setupControllers()
-
-    this.app.ticker.add(() => this.update())
   }
 
   setupControllers () {
@@ -46,7 +38,7 @@ export class Ship {
 
     window.addEventListener('keydown', (event) => {
       if (event.code === 'Space' && this.canShot) {
-        this.shot()
+        this.shoot()
         this.canShot = false
 
         setTimeout(() => this.canShot = true, 300)
@@ -55,22 +47,58 @@ export class Ship {
   }
 
   update () {
+    if (!this.sprite) return
+    const maxRotation = CONFIG.shipParams.maxRotation
+    const rotationSpeed = CONFIG.shipParams.rotationSpeed
+
+    if (!this.moveLeft && !this.moveRight) this.sprite.rotation = 0
+
     if (this.moveLeft) {
-      this.ship.x = Math.max(0, this.ship.x - this.speed)
+      this.sprite.x = Math.max(this.sprite.width / 2,
+        this.sprite.x - this.speed)
+      this.sprite.rotation = Math.max(-maxRotation,
+        this.sprite.rotation - rotationSpeed)
     }
+
     if (this.moveRight) {
-      this.ship.x = Math.min(CONFIG.screen.width - this.ship.width,
-        this.ship.x + this.speed)
+      this.sprite.x = Math.min(CONFIG.screen.width - this.sprite.width / 2,
+        this.sprite.x + this.speed)
+      this.sprite.rotation = Math.min(maxRotation,
+        this.sprite.rotation + rotationSpeed)
     }
   }
 
-  shot () {
-    if (this.bullets.length < this.bulletsAmount) {
-      const bullet = new Bullet(this.app,
-        this.ship.x + this.ship.width / 2 - 2.5, this.ship.y - 20)
-      this.bullets.push(bullet)
-    } else {
-      console.log('You Lose')
+  shoot () {
+    if (!this.canShot) return
+    this.canShot = false
+
+    setTimeout(() => (this.canShot = true), 300)
+
+    const bullet = new Bullet(
+      this.app,
+      this.sprite.x - 4,
+      this.sprite.y - this.sprite.height
+    )
+
+    this.game.addBullets(bullet)
+  }
+
+  getShipCords () {
+    if (!this.sprite) return null
+
+    const bounds = this.sprite.getBounds()
+    return {
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height
     }
+  }
+
+  destroy () {
+    this.app.ticker.remove(this.update, this)
+    this.app.stage.removeChild(this.sprite)
+    this.sprite.destroy()
+    this.sprite = null
   }
 }
