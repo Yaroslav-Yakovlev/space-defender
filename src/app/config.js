@@ -1,6 +1,8 @@
 import background from '../assets/images/black.png'
 import ship from '../assets/images/playerShip1_orange.png'
 import asteroid from '../assets/images/meteorBrown_big3.png'
+import destroyedAsteroid from '../assets/images/destroyed meteor.png'
+import destroyedShip from '../assets/images/playerShip1_damage3.png'
 
 export const CONFIG = {
   screen: {
@@ -10,7 +12,9 @@ export const CONFIG = {
   assets: {
     background: background,
     ship: ship,
-    asteroid: asteroid
+    asteroid: asteroid,
+    destroyedAsteroid: destroyedAsteroid,
+    destroyedShip: destroyedShip
   },
   shipParams: {
     width: 70,

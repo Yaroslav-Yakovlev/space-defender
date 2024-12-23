@@ -92,22 +92,14 @@ export class Game {
       if (this.isColliding(this.ship.getShipCords(),
         asteroid.getAsteroidCords())) {
         this.ship.destroy()
-        this.endGame()
+        // this.endGame()
       }
     })
-  }
-
-  endGame () {
-    setTimeout(() => {
-      alert('Game Over, You Lose')
-      this.app.ticker.stop()
-    }, 1000)
   }
 
   gameLoop () {
     this.ship.update()
     this.asteroids.forEach(a => a.update())
-    this.ship.update()
     this.bullets.forEach((b) => b.update())
 
     this.checkCollisions()

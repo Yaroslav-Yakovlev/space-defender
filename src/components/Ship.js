@@ -1,6 +1,7 @@
 import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
 import { Bullet } from './Bullet.js'
+import { fadeOutAndRemoveSprite } from '../app/utils.js'
 
 export class Ship {
   constructor (app, x, y, game) {
@@ -77,7 +78,7 @@ export class Ship {
     const bullet = new Bullet(
       this.app,
       this.sprite.x - 4,
-      this.sprite.y - this.sprite.height
+      this.sprite.y - (this.sprite.height / 2) - 12
     )
 
     this.game.addBullets(bullet)
@@ -96,9 +97,9 @@ export class Ship {
   }
 
   destroy () {
-    this.app.ticker.remove(this.update, this)
-    this.app.stage.removeChild(this.sprite)
-    this.sprite.destroy()
+    this.sprite.texture = Assets.get(CONFIG.assets.destroyedShip)
+
+    fadeOutAndRemoveSprite(this.sprite, this.app)
     this.sprite = null
   }
 }
