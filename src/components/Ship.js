@@ -11,6 +11,7 @@ export class Ship {
     this.moveRight = false
     this.speed = CONFIG.shipParams.speed
     this.canShot = true
+    this.bulletsAmount = CONFIG.shipParams.bulletsAmount
 
     const shipTexture = Assets.get(CONFIG.assets.ship)
     this.sprite = new Sprite(shipTexture)
@@ -70,7 +71,7 @@ export class Ship {
   }
 
   shoot () {
-    if (!this.canShot) return
+    if (!this.canShot || this.game.bulletsLeft <= 0) return null
     this.canShot = false
 
     setTimeout(() => (this.canShot = true), 300)

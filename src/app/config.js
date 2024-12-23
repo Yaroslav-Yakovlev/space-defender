@@ -1,10 +1,15 @@
-import background from '../assets/images/black.png'
 import ship from '../assets/images/playerShip1_orange.png'
 import asteroid from '../assets/images/meteorBrown_big3.png'
 import destroyedAsteroid from '../assets/images/destroyed meteor.png'
 import destroyedShip from '../assets/images/playerShip1_damage3.png'
+import background from '../assets/images/background.png'
 
 export const CONFIG = {
+  game: {
+    asteroidsInterval: 2000,
+    asteroidAmount: 10,
+    bulletsAmount: 10
+  },
   screen: {
     width: 1280,
     height: 720
@@ -20,7 +25,6 @@ export const CONFIG = {
     width: 70,
     height: 70,
     speed: 7,
-    bulletsAmount: 10,
     maxRotation: 0.2,
     rotationSpeed: 0.05
   },

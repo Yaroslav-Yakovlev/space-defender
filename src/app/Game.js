@@ -1,4 +1,4 @@
-import { Application, Assets, Sprite } from 'pixi.js'
+import { Application, Assets, Sprite, TextStyle, Text } from 'pixi.js'
 import { CONFIG } from './config.js'
 import { assetsLoader } from '../assets/assetsLoader.js'
 import { Ship } from '../components/Ship.js'
@@ -8,9 +8,10 @@ export class Game {
   constructor () {
     this.asteroids = []
     this.bullets = []
-    this.asteroidsInterval = 2000
-    this.asteroidAmound = 10
-    this.bulletsAmount = 10
+    this.asteroidsInterval = CONFIG.game.asteroidsInterval
+    this.asteroidAmound = CONFIG.game.asteroidAmount
+    this.bulletsLeft = 10
+    this.bulletsAmount = CONFIG.game.bulletsAmount
     this.shipX = CONFIG.screen.width / 2
     this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
   }
@@ -31,6 +32,8 @@ export class Game {
     this.loadShip()
     this.asteroidSpawner()
     this.checkCollisions()
+    this.createBulletCounter()
+
     this.app.ticker.add(() => this.gameLoop())
   }
 
@@ -48,6 +51,24 @@ export class Game {
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
   }
 
+  createBulletCounter() {
+    const style = new TextStyle({
+      fontFamily: 'Ubuntu',
+      fontSize: 28,
+      fontWeight: 500,
+      fill: '#ff0000'
+    })
+    this.bulletCounter = new Text(`Bullets: ${this.bulletsLeft} / ${this.bulletsAmount}`, style)
+    this.bulletCounter.x = 10
+    this.bulletCounter.y = 10
+    this.app.stage.addChild(this.bulletCounter)
+  }
+
+  updateBulletCounter() {
+    this.bulletCounter.text = `Bullets: ${this.bulletsLeft} / ${this.bulletsAmount}`
+  }
+
+
   asteroidSpawner () {
     setInterval(() => {
       if (this.asteroids.length + 1 < this.asteroidAmound) {
@@ -57,8 +78,13 @@ export class Game {
     }, this.asteroidsInterval)
   }
 
+
   addBullets (bullet) {
-    this.bullets.push(bullet)
+    if(this.bulletsLeft > 0) {
+      this.bullets.push(bullet)
+      this.bulletsLeft --
+      this.updateBulletCounter()
+    }
   }
 
   isColliding (sprite1, sprite2) {
