@@ -11,8 +11,8 @@ export class Game {
     this.asteroidsInterval = 2000
     this.asteroidAmound = 10
     this.bulletsAmount = 10
-    this.shipX = (CONFIG.screen.width - CONFIG.shipParams.width) / 2
-    this.shipY = CONFIG.screen.height - CONFIG.shipParams.height - 10
+    this.shipX = CONFIG.screen.width / 2
+    this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
   }
 
   async init () {
@@ -44,25 +44,24 @@ export class Game {
     this.app.stage.addChild(background)
   }
 
-
-  loadShip() {
+  loadShip () {
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
   }
 
-  asteroidSpawner() {
-      setInterval(() => {
-        if(this.asteroids.length + 1 < this.asteroidAmound) {
-          this.asteroid = new Asteroid(this.app)
-          this.asteroids.push(this.asteroid)
-        }
-      }, this.asteroidsInterval)
+  asteroidSpawner () {
+    setInterval(() => {
+      if (this.asteroids.length + 1 < this.asteroidAmound) {
+        this.asteroid = new Asteroid(this.app)
+        this.asteroids.push(this.asteroid)
+      }
+    }, this.asteroidsInterval)
   }
 
-  addBullets(bullet) {
+  addBullets (bullet) {
     this.bullets.push(bullet)
   }
 
-  isColliding(sprite1, sprite2) {
+  isColliding (sprite1, sprite2) {
     if (!sprite1 || !sprite2) return false
 
     const bounds1 = sprite1
@@ -76,10 +75,11 @@ export class Game {
     )
   }
 
-  checkCollisions() {
+  checkCollisions () {
     this.bullets.forEach((bullet) => {
       this.asteroids.forEach((asteroid) => {
-        if (this.isColliding(bullet.getBulletCords(), asteroid.getAsteroidCords())) {
+        if (this.isColliding(bullet.getBulletCords(),
+          asteroid.getAsteroidCords())) {
           bullet.destroy()
           asteroid.destroy()
         }
@@ -87,13 +87,31 @@ export class Game {
     })
   }
 
-  gameLoop() {
+  checkShipCollision () {
+    this.asteroids.forEach((asteroid) => {
+      if (this.isColliding(this.ship.getShipCords(),
+        asteroid.getAsteroidCords())) {
+        this.ship.destroy()
+        this.endGame()
+      }
+    })
+  }
+
+  endGame () {
+    setTimeout(() => {
+      alert('Game Over, You Lose')
+      this.app.ticker.stop()
+    }, 1000)
+  }
+
+  gameLoop () {
     this.ship.update()
     this.asteroids.forEach(a => a.update())
-
+    this.ship.update()
     this.bullets.forEach((b) => b.update())
 
     this.checkCollisions()
+    this.checkShipCollision()
   }
 }
 

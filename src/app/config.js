@@ -24,7 +24,7 @@ export const CONFIG = {
     height: 8,
     width: 16,
     color: 0x05bff2,
-    speed: 2
+    speed: 6
   },
   asteroidParams: {
     height: 80,
@@ -32,7 +32,7 @@ export const CONFIG = {
     minSpeed: 2,
     maxSpeed: 5,
     rotationSpeed: Math.random() * 0.1 - 0.03,
-    getAsteroidSpeed() {
+    getAsteroidSpeed () {
       return Math.random() * (this.maxSpeed - this.minSpeed) + this.minSpeed
     }
   }

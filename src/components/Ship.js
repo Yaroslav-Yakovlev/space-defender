@@ -22,8 +22,6 @@ export class Ship {
     this.app.stage.addChild(this.sprite)
 
     this.setupControllers()
-
-    this.app.ticker.add(() => this.update())
   }
 
   setupControllers () {
@@ -48,35 +46,59 @@ export class Ship {
     })
   }
 
-  update() {
+  update () {
+    if (!this.sprite) return
     const maxRotation = CONFIG.shipParams.maxRotation
     const rotationSpeed = CONFIG.shipParams.rotationSpeed
 
     if (!this.moveLeft && !this.moveRight) this.sprite.rotation = 0
 
     if (this.moveLeft) {
-      this.sprite.x = Math.max(0, this.sprite.x - this.speed);
-      this.sprite.rotation = Math.max(-maxRotation, this.sprite.rotation - rotationSpeed)
+      this.sprite.x = Math.max(this.sprite.width / 2,
+        this.sprite.x - this.speed)
+      this.sprite.rotation = Math.max(-maxRotation,
+        this.sprite.rotation - rotationSpeed)
     }
 
     if (this.moveRight) {
-      this.sprite.x = Math.min(CONFIG.screen.width - this.sprite.width, this.sprite.x + this.speed)
-      this.sprite.rotation = Math.min(maxRotation, this.sprite.rotation + rotationSpeed)
+      this.sprite.x = Math.min(CONFIG.screen.width - this.sprite.width / 2,
+        this.sprite.x + this.speed)
+      this.sprite.rotation = Math.min(maxRotation,
+        this.sprite.rotation + rotationSpeed)
     }
   }
 
-  shoot() {
-    if (!this.canShot) return null;
-    this.canShot = false;
+  shoot () {
+    if (!this.canShot) return
+    this.canShot = false
 
     setTimeout(() => (this.canShot = true), 300)
 
-      const bullet = new Bullet(
-        this.app,
-        this.sprite.x - 4,
-        this.sprite.y - this.sprite.height
-      )
+    const bullet = new Bullet(
+      this.app,
+      this.sprite.x - 4,
+      this.sprite.y - this.sprite.height
+    )
 
     this.game.addBullets(bullet)
+  }
+
+  getShipCords () {
+    if (!this.sprite) return null
+
+    const bounds = this.sprite.getBounds()
+    return {
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height
+    }
+  }
+
+  destroy () {
+    this.app.ticker.remove(this.update, this)
+    this.app.stage.removeChild(this.sprite)
+    this.sprite.destroy()
+    this.sprite = null
   }
 }
