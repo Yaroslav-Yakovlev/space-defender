@@ -1,5 +1,5 @@
 import { Assets } from 'pixi.js'
-import background from './images/black.png'
+import background from './images/background.png'
 import ship from './images/playerShip1_orange.png'
 import asteroid from './images/meteorBrown_big3.png'
 import destroyedAsteroid from './images/destroyed meteor.png'
