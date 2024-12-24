@@ -70,8 +70,12 @@ export class Ship {
     }
   }
 
+  isCanShoot() {
+    return !this.canShot || this.game.bulletsLeft <= 0 || !this.sprite
+  }
+
   shoot () {
-    if (!this.canShot || this.game.bulletsLeft <= 0) return null
+    if (this.isCanShoot()) return
     this.canShot = false
 
     setTimeout(() => (this.canShot = true), 300)
