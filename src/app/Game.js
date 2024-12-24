@@ -4,6 +4,7 @@ import { assetsLoader } from '../assets/assetsLoader.js'
 import { Ship } from '../components/Ship.js'
 import { Asteroid } from '../components/Asteroid'
 import { BulletsCounter } from '../ui/bulletsCounter/BulletsCounter'
+import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer'
 
 export class Game {
   constructor () {
@@ -13,6 +14,7 @@ export class Game {
     this.asteroidAmound = CONFIG.game.asteroidAmount
     this.bulletsLeft = CONFIG.game.bulletsAmount
     this.bulletsAmount = CONFIG.game.bulletsAmount
+    this.gameDuration = CONFIG.game.gameDuration
     this.shipX = CONFIG.screen.width / 2
     this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
   }
@@ -34,6 +36,7 @@ export class Game {
     this.createBulletsCounter()
     this.asteroidSpawner()
     this.checkCollisions()
+    this.createCountDownTimer()
 
     this.app.ticker.add(() => this.gameLoop())
   }
@@ -50,6 +53,11 @@ export class Game {
 
   loadShip () {
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
+  }
+
+  createCountDownTimer() {
+    this.timer = new CountDownTimer(this.app, this.gameDuration)
+    this.timer.start()
   }
 
   createBulletsCounter() {

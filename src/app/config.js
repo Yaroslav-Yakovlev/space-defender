@@ -8,7 +8,8 @@ export const CONFIG = {
   game: {
     asteroidsInterval: 2000,
     asteroidAmount: 10,
-    bulletsAmount: 10
+    bulletsAmount: 10,
+    gameDuration: 60
   },
   screen: {
     width: 1280,
