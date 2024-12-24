@@ -1,8 +1,9 @@
-import { Application, Assets, Sprite, TextStyle, Text } from 'pixi.js'
+import { Application, Assets, Sprite } from 'pixi.js'
 import { CONFIG } from './config.js'
 import { assetsLoader } from '../assets/assetsLoader.js'
 import { Ship } from '../components/Ship.js'
 import { Asteroid } from '../components/Asteroid'
+import { BulletsCounter } from '../ui/bulletsCounter/BulletsCounter'
 
 export class Game {
   constructor () {
@@ -10,7 +11,7 @@ export class Game {
     this.bullets = []
     this.asteroidsInterval = CONFIG.game.asteroidsInterval
     this.asteroidAmound = CONFIG.game.asteroidAmount
-    this.bulletsLeft = 10
+    this.bulletsLeft = CONFIG.game.bulletsAmount
     this.bulletsAmount = CONFIG.game.bulletsAmount
     this.shipX = CONFIG.screen.width / 2
     this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
@@ -30,9 +31,9 @@ export class Game {
 
     this.loadBackground()
     this.loadShip()
+    this.createBulletsCounter()
     this.asteroidSpawner()
     this.checkCollisions()
-    this.createBulletCounter()
 
     this.app.ticker.add(() => this.gameLoop())
   }
@@ -51,39 +52,24 @@ export class Game {
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
   }
 
-  createBulletCounter() {
-    const style = new TextStyle({
-      fontFamily: 'Ubuntu',
-      fontSize: 28,
-      fontWeight: 500,
-      fill: '#ff0000'
-    })
-    this.bulletCounter = new Text(`Bullets: ${this.bulletsLeft} / ${this.bulletsAmount}`, style)
-    this.bulletCounter.x = 10
-    this.bulletCounter.y = 10
-    this.app.stage.addChild(this.bulletCounter)
+  createBulletsCounter() {
+    this.bulletsCounter = new BulletsCounter(this.app, this.bulletsLeft, this.bulletsAmount)
   }
-
-  updateBulletCounter() {
-    this.bulletCounter.text = `Bullets: ${this.bulletsLeft} / ${this.bulletsAmount}`
-  }
-
 
   asteroidSpawner () {
     setInterval(() => {
-      if (this.asteroids.length + 1 < this.asteroidAmound) {
+      if (this.asteroids.length < this.asteroidAmound) {
         this.asteroid = new Asteroid(this.app)
         this.asteroids.push(this.asteroid)
       }
     }, this.asteroidsInterval)
   }
 
-
-  addBullets (bullet) {
-    if(this.bulletsLeft > 0) {
+  handleBulletFire (bullet) {
+    if(this.bulletsLeft) {
       this.bullets.push(bullet)
-      this.bulletsLeft --
-      this.updateBulletCounter()
+      this.bulletsLeft--
+      this.bulletsCounter.update(this.bulletsLeft)
     }
   }
 

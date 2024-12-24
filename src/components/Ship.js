@@ -82,7 +82,7 @@ export class Ship {
       this.sprite.y - (this.sprite.height / 2) - 12
     )
 
-    this.game.addBullets(bullet)
+    this.game.handleBulletFire(bullet)
   }
 
   getShipCords () {
