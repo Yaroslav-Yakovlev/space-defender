@@ -4,6 +4,7 @@ import ship from './images/playerShip1_orange.png'
 import asteroid from './images/meteorBrown_big3.png'
 import destroyedAsteroid from './images/destroyed meteor.png'
 import destroyedShip from './images/playerShip1_damage3.png'
+import button from './ui/buttonYellow.png'
 
 export async function assetsLoader () {
   const assets = [
@@ -11,7 +12,8 @@ export async function assetsLoader () {
     { name: 'ship', src: ship },
     { name: 'asteroid', src: asteroid },
     { name: 'destroyed asteroid', src: destroyedAsteroid },
-    { name: 'destroyed ship', src: destroyedShip }
+    { name: 'destroyed ship', src: destroyedShip },
+    { name: 'button', src: button }
   ]
 
   try {

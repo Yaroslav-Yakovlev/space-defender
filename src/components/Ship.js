@@ -13,8 +13,7 @@ export class Ship {
     this.canShot = true
     this.bulletsAmount = CONFIG.shipParams.bulletsAmount
 
-    const shipTexture = Assets.get(CONFIG.assets.ship)
-    this.sprite = new Sprite(shipTexture)
+    this.sprite = new Sprite( Assets.get(CONFIG.assets.ship))
 
     this.sprite.width = CONFIG.shipParams.width
     this.sprite.height = CONFIG.shipParams.height

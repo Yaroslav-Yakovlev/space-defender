@@ -10,12 +10,25 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
-    static: './dist',
+    static: [
+      {
+        directory: path.resolve(__dirname, 'public'),
+        publicPath: '/',
+      },
+      {
+        directory: path.resolve(__dirname, 'src/styles'),
+        publicPath: '/src/styles',
+      },
+    ],
     open: true,
     port: 3000,
   },
   module: {
     rules: [
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
         type: 'asset/resource',

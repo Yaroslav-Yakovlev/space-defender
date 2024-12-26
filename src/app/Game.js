@@ -5,6 +5,7 @@ import { Ship } from '../components/Ship.js'
 import { Asteroid } from '../components/Asteroid'
 import { BulletsCounter } from '../ui/bulletsCounter/BulletsCounter'
 import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer'
+import { Button } from '../ui/button/Button'
 
 export class Game {
   constructor () {
@@ -37,6 +38,7 @@ export class Game {
     this.asteroidSpawner()
     this.checkCollisions()
     this.createCountDownTimer()
+    this.createButton()
 
     this.app.ticker.add(() => this.gameLoop())
   }
@@ -51,16 +53,20 @@ export class Game {
     this.app.stage.addChild(background)
   }
 
+  createButton () {
+    new Button(this.app)
+  }
+
   loadShip () {
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
   }
 
-  createCountDownTimer() {
+  createCountDownTimer () {
     this.timer = new CountDownTimer(this.app, this.gameDuration)
     this.timer.start()
   }
 
-  createBulletsCounter() {
+  createBulletsCounter () {
     this.bulletsCounter = new BulletsCounter(this.app, this.bulletsLeft, this.bulletsAmount)
   }
 
@@ -74,7 +80,7 @@ export class Game {
   }
 
   handleBulletFire (bullet) {
-    if(this.bulletsLeft) {
+    if (this.bulletsLeft) {
       this.bullets.push(bullet)
       this.bulletsLeft--
       this.bulletsCounter.update(this.bulletsLeft)
@@ -84,14 +90,11 @@ export class Game {
   isColliding (sprite1, sprite2) {
     if (!sprite1 || !sprite2) return false
 
-    const bounds1 = sprite1
-    const bounds2 = sprite2
-
     return (
-      bounds1.x < bounds2.x + bounds2.width &&
-      bounds1.x + bounds2.width > bounds2.x &&
-      bounds1.y < bounds2.y + bounds2.height &&
-      bounds1.y + bounds1.height > bounds2.y
+      sprite1.x < sprite2.x + sprite2.width &&
+      sprite1.x + sprite2.width > sprite2.x &&
+      sprite1.y < sprite2.y + sprite2.height &&
+      sprite1.y + sprite1.height > sprite2.y
     )
   }
 

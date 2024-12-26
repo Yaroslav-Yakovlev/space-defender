@@ -3,24 +3,31 @@ import asteroid from '../assets/images/meteorBrown_big3.png'
 import destroyedAsteroid from '../assets/images/destroyed meteor.png'
 import destroyedShip from '../assets/images/playerShip1_damage3.png'
 import background from '../assets/images/background.png'
+import button from '../assets/ui/buttonYellow.png'
 
 export const CONFIG = {
+  screen: {
+    width: 1280,
+    height: 720
+  },
   game: {
     asteroidsInterval: 2000,
     asteroidAmount: 10,
     bulletsAmount: 10,
     gameDuration: 60
   },
-  screen: {
-    width: 1280,
-    height: 720
+  button: {
+    width: 250,
+    height: 50,
+    text: 'Start Game'
   },
   assets: {
     background: background,
     ship: ship,
     asteroid: asteroid,
     destroyedAsteroid: destroyedAsteroid,
-    destroyedShip: destroyedShip
+    destroyedShip: destroyedShip,
+    button: button
   },
   shipParams: {
     width: 70,
