@@ -1,11 +1,12 @@
 import { Application, Assets, Sprite } from 'pixi.js'
 import { CONFIG } from './config.js'
 import { assetsLoader } from '../assets/assetsLoader.js'
-import { Ship } from '../components/Ship.js'
-import { Asteroid } from '../components/Asteroid'
+import { Ship } from '../entities/Ship.js'
+import { Asteroid } from '../entities/Asteroid'
 import { BulletsCounter } from '../ui/bulletsCounter/BulletsCounter'
 import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer'
 import { Button } from '../ui/button/Button'
+import { ResultMessage } from '../ui/resultMessage/ResultMessage'
 
 export class Game {
   constructor () {
@@ -39,6 +40,7 @@ export class Game {
     this.checkCollisions()
     this.createCountDownTimer()
     this.createButton()
+    // this.createMessage()
 
     this.app.ticker.add(() => this.gameLoop())
   }
@@ -55,6 +57,10 @@ export class Game {
 
   createButton () {
     new Button(this.app)
+  }
+
+  createMessage() {
+    new ResultMessage(this.app)
   }
 
   loadShip () {
