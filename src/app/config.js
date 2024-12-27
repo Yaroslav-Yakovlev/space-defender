@@ -16,6 +16,18 @@ export const CONFIG = {
     bulletsAmount: 10,
     gameDuration: 60
   },
+  resultMessage: {
+    border: {
+      width: 500,
+      height: 150,
+      radius: 16,
+      borderColor: 0xffffff
+    },
+    messageText: {
+      youWin: 'You Win!',
+      youLose: 'You Lose!'
+    }
+  },
   button: {
     width: 250,
     height: 50,
