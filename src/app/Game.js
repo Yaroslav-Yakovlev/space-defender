@@ -39,8 +39,8 @@ export class Game {
     this.asteroidSpawner()
     this.checkCollisions()
     this.createCountDownTimer()
-    // this.createButton()
-    this.createMessage()
+    this.createButton()
+    // this.createMessage()
 
     this.app.ticker.add(() => this.gameLoop())
   }

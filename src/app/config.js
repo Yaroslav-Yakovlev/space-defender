@@ -31,7 +31,7 @@ export const CONFIG = {
   button: {
     width: 250,
     height: 50,
-    text: 'Start Game'
+    text: 'Start Game',
   },
   assets: {
     background: background,

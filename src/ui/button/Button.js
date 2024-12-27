@@ -12,14 +12,8 @@ export class Button {
   initButton () {
     this.container = new Container()
 
-    this.buttonSprite = new Sprite(Assets.get(CONFIG.assets.button))
-    this.buttonSprite.anchor.set(0.5)
-
-    this.text = new Text(CONFIG.button.text, buttonStyle)
-    this.text.anchor.set(0.5)
-
-    this.container.addChild(this.buttonSprite)
-    this.container.addChild(this.text)
+    this.container.addChild(this.createButtonSprite())
+    this.container.addChild(this.createButtonText())
 
     this.container.x = CONFIG.screen.width / 2
     this.container.y = CONFIG.screen.height / 2
@@ -32,6 +26,20 @@ export class Button {
     this.addKeyboardListener()
 
     this.app.stage.addChild(this.container)
+  }
+
+  createButtonSprite() {
+    this.buttonSprite = new Sprite(Assets.get(CONFIG.assets.button))
+    this.buttonSprite.anchor.set(0.5)
+
+    return this.buttonSprite
+  }
+
+  createButtonText() {
+    const text = new Text(CONFIG.button.text, buttonStyle)
+    text.anchor.set(0.5)
+
+    return text
   }
 
   eventListeners () {
@@ -75,9 +83,10 @@ export class Button {
 
       if (checkScale()) {
         this.app.stage.removeChild(this.container)
-        this.container.destroy()
+        this.container.destroy({ children: true })
         this.app.ticker.remove(onTick)
         this.removeKeyboardListener()
+        this.container.removeAllListeners()
         this.isDestroyed = true
       }
     }
