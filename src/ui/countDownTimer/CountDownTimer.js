@@ -2,9 +2,10 @@ import { Text } from 'pixi.js'
 import { CountDownTimerStyle } from './countDownStyle.js'
 
 export class CountDownTimer {
-  constructor (app, duration) {
+  constructor (app, duration, onTimeChange) {
     this.app = app
     this.remainingTime = duration
+    this.onTimeChange = onTimeChange
     this.interval = null
 
     this.timerText = new Text(`Time left: ${this.remainingTime}`, CountDownTimerStyle)
@@ -20,6 +21,9 @@ export class CountDownTimer {
     this.interval = setInterval(() => {
       this.remainingTime --
       this.timerText.text = `Time left: ${this.remainingTime}`
+      if(this.onTimeChange) {
+        this.onTimeChange(this.remainingTime)
+      }
       if(this.remainingTime === 0) {
         this.timerText.text = `Time's up!`
         clearInterval(this.interval)
@@ -33,5 +37,4 @@ export class CountDownTimer {
       this.interval = null
     }
   }
-
 }

@@ -3,10 +3,16 @@ import { buttonStyle } from './buttonStyle.js'
 import { CONFIG } from '../../app/config.js'
 
 export class Button {
-  constructor (app) {
+  constructor (app, buttonText, game) {
     this.app = app
-    this.initButton()
+    this.buttonText = buttonText
+    this.game = game
     this.isDestroyed = false
+    this.initButton()
+  }
+
+  isResetButton () {
+    return this.buttonText === CONFIG.button.restartGameText
   }
 
   initButton () {
@@ -16,7 +22,9 @@ export class Button {
     this.container.addChild(this.createButtonText())
 
     this.container.x = CONFIG.screen.width / 2
-    this.container.y = CONFIG.screen.height / 2
+    this.container.y = this.isResetButton()
+      ? CONFIG.screen.height / 2 + 200
+      : CONFIG.screen.height / 2
     this.container.width = CONFIG.button.width
     this.container.height = CONFIG.button.height
     this.container.interactive = true
@@ -28,15 +36,15 @@ export class Button {
     this.app.stage.addChild(this.container)
   }
 
-  createButtonSprite() {
+  createButtonSprite () {
     this.buttonSprite = new Sprite(Assets.get(CONFIG.assets.button))
     this.buttonSprite.anchor.set(0.5)
 
     return this.buttonSprite
   }
 
-  createButtonText() {
-    const text = new Text(CONFIG.button.text, buttonStyle)
+  createButtonText () {
+    const text = new Text(this.buttonText, buttonStyle)
     text.anchor.set(0.5)
 
     return text
@@ -72,9 +80,15 @@ export class Button {
 
   onPointerDown () {
     if (this.isDestroyed) return
+
+    // if (this.isResetButton()) {
+    //   this.game.resetGame()
+    // }
+
+    this.app.ticker.start()
     let scaleSpeed = 0.09
 
-    const onTick = () => {
+    this.onTick = () => {
       this.container.scale.x -= scaleSpeed
       this.container.scale.y -= scaleSpeed
 
@@ -82,14 +96,19 @@ export class Button {
         this.container.scale.x <= 0 || this.container.scale.y <= 0
 
       if (checkScale()) {
-        this.app.stage.removeChild(this.container)
-        this.container.destroy({ children: true })
-        this.app.ticker.remove(onTick)
-        this.removeKeyboardListener()
-        this.container.removeAllListeners()
-        this.isDestroyed = true
+        this.removeContainer()
+        this.game.startGame()
       }
     }
-    this.app.ticker.add(onTick)
+    this.app.ticker.add(this.onTick)
+  }
+
+  removeContainer() {
+    this.app.stage.removeChild(this.container)
+    this.container.destroy({ children: true })
+    this.app.ticker.remove(this.onTick)
+    this.removeKeyboardListener()
+    this.container.removeAllListeners()
+    this.isDestroyed = true
   }
 }

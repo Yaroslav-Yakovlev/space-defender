@@ -14,7 +14,7 @@ export const CONFIG = {
     asteroidsInterval: 2000,
     asteroidAmount: 10,
     bulletsAmount: 10,
-    gameDuration: 60
+    gameDuration: 60,
   },
   resultMessage: {
     border: {
@@ -31,7 +31,9 @@ export const CONFIG = {
   button: {
     width: 250,
     height: 50,
-    text: 'Start Game',
+    startGameText: 'Start Game',
+    restartGameText: 'Try Again',
+    nextLevelText: 'Next Level'
   },
   assets: {
     background: background,
@@ -57,8 +59,8 @@ export const CONFIG = {
   asteroidParams: {
     height: 80,
     width: 80,
-    minSpeed: 2,
-    maxSpeed: 5,
+    minSpeed: 3,
+    maxSpeed: 6,
     rotationSpeed: Math.random() * 0.1 - 0.03,
     getAsteroidSpeed () {
       return Math.random() * (this.maxSpeed - this.minSpeed) + this.minSpeed

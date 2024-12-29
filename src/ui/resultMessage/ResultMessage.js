@@ -14,7 +14,8 @@ export class ResultMessage {
     this.container = new Container()
 
     this.container.addChild(this.createBorder())
-    this.container.addChild(this.createText())
+    this.text = this.createText()
+    this.container.addChild(this.text)
 
     this.container.x = CONFIG.screen.width / 2
     this.container.y = CONFIG.screen.height / 2
@@ -39,7 +40,7 @@ export class ResultMessage {
   }
 
   createText () {
-    const text = new Text(CONFIG.resultMessage.messageText.youWin, resultMessageStyle)
+    const text = new Text(this.messageText, resultMessageStyle)
     text.anchor.set(0.5)
 
     return text
