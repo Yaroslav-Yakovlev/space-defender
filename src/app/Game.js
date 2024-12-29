@@ -17,8 +17,11 @@ export class Game {
     this.bulletsLeft = CONFIG.game.bulletsAmount
     this.bulletsAmount = CONFIG.game.bulletsAmount
     this.gameDuration = CONFIG.game.gameDuration
+    this.desrtoyedAsteroids = 0
     this.shipX = CONFIG.screen.width / 2
     this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
+    this.isGameRunning = false
+    this.gameResult = ''
   }
 
   async init () {
@@ -34,33 +37,49 @@ export class Game {
     await assetsLoader()
 
     this.loadBackground()
-    this.loadShip()
-    this.createBulletsCounter()
-    this.asteroidSpawner()
     this.checkCollisions()
-    this.createCountDownTimer()
-    this.createButton()
-    // this.createMessage()
+    this.createStarButton()
 
-    this.app.ticker.add(() => this.gameLoop())
+    this.app.ticker.add(() => {
+      if (this.isGameRunning) this.gameLoop()
+    })
   }
 
   loadBackground () {
-    const texture = Assets.get(CONFIG.assets.background)
-    const background = new Sprite(texture)
-
+    const background = new Sprite(Assets.get(CONFIG.assets.background))
     background.width = CONFIG.screen.width
     background.height = CONFIG.screen.height
 
     this.app.stage.addChild(background)
   }
 
-  createButton () {
-    new Button(this.app)
+  createStarButton () {
+    new Button(this.app, CONFIG.button.startGameText,this)
   }
 
-  createMessage() {
-    new ResultMessage(this.app)
+  startGame () {
+    if (this.isGameRunning) return
+
+    this.clearAsteroidSpawner()
+
+    this.isGameRunning = true
+    this.app.stage.removeChildren()
+    this.loadBackground()
+    this.loadShip()
+    this.createBulletsCounter()
+    this.createCountDownTimer()
+    this.asteroidSpawner()
+  }
+
+  showGameResult () {
+    this.isGameRunning = false
+    this.clearAsteroidSpawner()
+    const resultText = CONFIG.resultMessage.messageText[this.gameResult]
+    new ResultMessage(this.app, resultText)
+
+    setTimeout(() => {
+      this.app.ticker.stop()
+    }, 100)
   }
 
   loadShip () {
@@ -68,7 +87,13 @@ export class Game {
   }
 
   createCountDownTimer () {
-    this.timer = new CountDownTimer(this.app, this.gameDuration)
+    this.timer = new CountDownTimer(this.app, this.gameDuration, (remainingTime) => {
+      this.leftTimeGame = remainingTime
+      if(this.leftTimeGame === 0 && this.desrtoyedAsteroids < this.asteroidAmound) {
+        this.gameResult = 'youLose'
+        this.showGameResult()
+      }
+    })
     this.timer.start()
   }
 
@@ -77,12 +102,19 @@ export class Game {
   }
 
   asteroidSpawner () {
-    setInterval(() => {
+   this.asteroidSpawnInterval = setInterval(() => {
       if (this.asteroids.length < this.asteroidAmound) {
-        this.asteroid = new Asteroid(this.app)
+        this.asteroid = new Asteroid(this.app, this)
         this.asteroids.push(this.asteroid)
       }
     }, this.asteroidsInterval)
+  }
+
+  clearAsteroidSpawner() {
+    if(this.asteroidSpawnInterval) {
+      clearInterval(this.asteroidSpawnInterval)
+      this.asteroidsInterval = null
+    }
   }
 
   handleBulletFire (bullet) {
@@ -92,6 +124,7 @@ export class Game {
       this.bulletsCounter.update(this.bulletsLeft)
     }
   }
+
 
   isColliding (sprite1, sprite2) {
     if (!sprite1 || !sprite2) return false
@@ -107,13 +140,17 @@ export class Game {
   checkCollisions () {
     this.bullets.forEach((bullet) => {
       this.asteroids.forEach((asteroid) => {
-        if (this.isColliding(bullet.getBulletCords(),
-          asteroid.getAsteroidCords())) {
+        if (this.isColliding(bullet.getBulletCords(), asteroid.getAsteroidCords())) {
+          this.desrtoyedAsteroids ++
           bullet.destroy()
           asteroid.destroy()
         }
       })
     })
+    if(this.desrtoyedAsteroids === this.asteroidAmound) {
+      this.gameResult = 'youWin'
+      this.showGameResult()
+    }
   }
 
   checkShipCollision () {
@@ -121,7 +158,8 @@ export class Game {
       if (this.isColliding(this.ship.getShipCords(),
         asteroid.getAsteroidCords())) {
         this.ship.destroy()
-        // this.endGame()
+        this.gameResult = 'youLose'
+        this.showGameResult()
       }
     })
   }

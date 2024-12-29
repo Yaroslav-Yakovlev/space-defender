@@ -3,13 +3,13 @@ import { CONFIG } from '../app/config.js'
 import { fadeOutAndRemoveSprite } from '../app/utils.js'
 
 export class Asteroid {
-  constructor (app) {
+  constructor (app, game) {
     this.app = app
+    this.game = game
     this.rotationSpeed = CONFIG.asteroidParams.rotationSpeed
     this.speed = CONFIG.asteroidParams.getAsteroidSpeed()
 
-    this.asteroidTexture = Assets.get(CONFIG.assets.asteroid)
-    this.sprite = new Sprite(this.asteroidTexture)
+    this.sprite = new Sprite(Assets.get(CONFIG.assets.asteroid))
     this.sprite.width = CONFIG.asteroidParams.width
     this.sprite.height = CONFIG.asteroidParams.height
     this.sprite.x = Math.random() * (CONFIG.screen.width - this.sprite.width)
@@ -26,11 +26,13 @@ export class Asteroid {
 
     if(this.sprite.y > this.app.screen.height + this.sprite.height) {
       this.destroy()
+      this.game.gameResult = 'youLose'
+      this.game.showGameResult()
     }
   }
 
   getAsteroidCords() {
-    if (!this.sprite) return
+    if (!this.sprite) return null
     const bounds = this.sprite.getBounds()
 
     return {

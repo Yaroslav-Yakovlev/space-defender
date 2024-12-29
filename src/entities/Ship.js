@@ -14,7 +14,6 @@ export class Ship {
     this.bulletsAmount = CONFIG.shipParams.bulletsAmount
 
     this.sprite = new Sprite( Assets.get(CONFIG.assets.ship))
-
     this.sprite.width = CONFIG.shipParams.width
     this.sprite.height = CONFIG.shipParams.height
     this.sprite.x = x
@@ -26,26 +25,29 @@ export class Ship {
   }
 
   setupControllers () {
-    window.addEventListener('keydown', (event) => {
+      this.keydownHandler = (event) => {
         if (event.code === 'ArrowLeft') this.moveLeft = true
         if (event.code === 'ArrowRight') this.moveRight = true
+        if (event.code === 'Space' && this.canShot) {
+          this.shoot()
+          this.canShot = false
+          setTimeout(() => (this.canShot = true), 300)
+        }
       }
-    )
 
-    window.addEventListener('keyup', (event) => {
-      if (event.code === 'ArrowLeft') this.moveLeft = false
-      if (event.code === 'ArrowRight') this.moveRight = false
-    })
-
-    window.addEventListener('keydown', (event) => {
-      if (event.code === 'Space' && this.canShot) {
-        this.shoot()
-        this.canShot = false
-
-        setTimeout(() => this.canShot = true, 300)
+      this.keyupHandler = (event) => {
+        if (event.code === 'ArrowLeft') this.moveLeft = false
+        if (event.code === 'ArrowRight') this.moveRight = false
       }
-    })
-  }
+
+      window.addEventListener('keydown', this.keydownHandler)
+      window.addEventListener('keyup', this.keyupHandler)
+    }
+
+    removeControllers() {
+      window.removeEventListener('keydown', this.keydownHandler)
+      window.removeEventListener('keyup', this.keyupHandler)
+    }
 
   update () {
     if (!this.sprite) return
@@ -101,6 +103,7 @@ export class Ship {
   }
 
   destroy () {
+    this.removeControllers()
     this.sprite.texture = Assets.get(CONFIG.assets.destroyedShip)
 
     fadeOutAndRemoveSprite(this.sprite, this.app)
