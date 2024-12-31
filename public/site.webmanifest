@@ -1,6 +1,6 @@
 {
-  "name": "SpaceDefender",
-  "short_name": "SpaceDefender",
+  "name": "MyWebSite",
+  "short_name": "MySite",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#000000",
-  "background_color": "#000000",
+  "theme_color": "#6d2f2f",
+  "background_color": "#c29595",
   "display": "standalone"
 }
