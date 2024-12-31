@@ -74,8 +74,10 @@ export class Game {
   showGameResult () {
     this.isGameRunning = false
     this.clearAsteroidSpawner()
-    const resultText = CONFIG.resultMessage.messageText[this.gameResult]
+    let resultText = CONFIG.resultMessage.messageText[this.gameResult]
     new ResultMessage(this.app, resultText)
+
+    new Button(this.app, resultText, this)
 
     setTimeout(() => {
       this.app.ticker.stop()
