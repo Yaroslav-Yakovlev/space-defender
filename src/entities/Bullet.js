@@ -17,7 +17,7 @@ export class Bullet {
     this.app.stage.addChild(this.graphic)
   }
 
-  update() {
+  update () {
     if (!this.graphic) return
     this.graphic.y -= this.speed
     if (this.graphic.y + this.graphic.height < 0) {
@@ -25,8 +25,8 @@ export class Bullet {
     }
   }
 
-  getBulletCords() {
-    if(!this.graphic) return
+  getBulletCords () {
+    if (!this.graphic) return
     const bounds = this.graphic.getBounds()
 
     return {
@@ -38,6 +38,7 @@ export class Bullet {
   }
 
   destroy () {
+    if (!this.graphic) return
     this.app.ticker.remove(this.update, this)
     this.app.stage.removeChild(this.graphic)
     this.graphic.destroy()

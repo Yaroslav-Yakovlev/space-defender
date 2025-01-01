@@ -96,7 +96,6 @@ export class Button {
   onPointerDown () {
     if (this.isDestroyed) return
 
-
     this.app.ticker.start()
     let scaleSpeed = 0.09
 
@@ -104,14 +103,15 @@ export class Button {
       this.container.scale.x -= scaleSpeed
       this.container.scale.y -= scaleSpeed
 
-      const checkScale = () => this.container.scale.x <= 0 || this.container.scale.y <= 0
+      const checkScale = () => this.container.scale.x <= 0 ||
+        this.container.scale.y <= 0
 
       if (checkScale()) {
         this.removeContainer()
         if (this.buttonText === CONFIG.resultMessage.messageText.youLose) {
-          // this.game.resetGame() // Implement reset logic
-          console.log('Reset')
-        } else if (this.buttonText === CONFIG.resultMessage.messageText.youWin) {
+          this.game.resetGame()
+        } else if (this.buttonText ===
+          CONFIG.resultMessage.messageText.youWin) {
           console.log('Next')
           // this.game.nextLevel() Implement logic
         } else {
@@ -122,7 +122,7 @@ export class Button {
     this.app.ticker.add(this.onTick)
   }
 
-  removeContainer() {
+  removeContainer () {
     this.app.stage.removeChild(this.container)
     this.container.destroy({ children: true })
     this.app.ticker.remove(this.onTick)

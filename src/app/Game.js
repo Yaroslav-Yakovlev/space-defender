@@ -54,7 +54,7 @@ export class Game {
   }
 
   createStarButton () {
-    new Button(this.app, CONFIG.button.startGameText,this)
+    new Button(this.app, CONFIG.button.startGameText, this)
   }
 
   startGame () {
@@ -71,6 +71,25 @@ export class Game {
     this.asteroidSpawner()
   }
 
+  resetGame () {
+    this.clearAsteroidSpawner()
+    this.timer.reset()
+    this.asteroids.forEach((asteroid) => asteroid.destroy())
+    this.bullets.forEach((bullet) => bullet.destroy())
+
+    this.asteroids = []
+    this.bullets = []
+
+    this.bulletsLeft = this.asteroidAmound
+    this.desrtoyedAsteroids = 0
+    this.gameResult = ''
+    this.isGameRunning = false
+
+    this.app.stage.removeChildren()
+    this.loadBackground()
+    this.createStarButton()
+  }
+
   showGameResult () {
     this.isGameRunning = false
     this.clearAsteroidSpawner()
@@ -85,26 +104,37 @@ export class Game {
   }
 
   loadShip () {
+    if (this.ship) {
+      this.ship.removeControllers()
+    }
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
+    this.ship.setupControllers()
   }
 
   createCountDownTimer () {
-    this.timer = new CountDownTimer(this.app, this.gameDuration, (remainingTime) => {
-      this.leftTimeGame = remainingTime
-      if(this.leftTimeGame === 0 && this.desrtoyedAsteroids < this.asteroidAmound) {
-        this.gameResult = 'youLose'
-        this.showGameResult()
-      }
-    })
+    this.timer = new CountDownTimer(this.app, this.gameDuration,
+      (remainingTime) => {
+        this.leftTimeGame = remainingTime
+        if (this.leftTimeGame === 0 && this.desrtoyedAsteroids <
+          this.asteroidAmound) {
+          this.gameResult = 'youLose'
+
+          this.timer.stop()
+          this.timer.reset()
+          this.showGameResult()
+        }
+      })
     this.timer.start()
   }
 
   createBulletsCounter () {
-    this.bulletsCounter = new BulletsCounter(this.app, this.bulletsLeft, this.bulletsAmount)
+    this.bulletsCounter = new BulletsCounter(this.app, this.bulletsLeft,
+      this.bulletsAmount)
   }
 
   asteroidSpawner () {
-   this.asteroidSpawnInterval = setInterval(() => {
+    if (!this.isGameRunning) return
+    this.asteroidSpawnInterval = setInterval(() => {
       if (this.asteroids.length < this.asteroidAmound) {
         this.asteroid = new Asteroid(this.app, this)
         this.asteroids.push(this.asteroid)
@@ -112,10 +142,10 @@ export class Game {
     }, this.asteroidsInterval)
   }
 
-  clearAsteroidSpawner() {
-    if(this.asteroidSpawnInterval) {
+  clearAsteroidSpawner () {
+    if (this.asteroidSpawnInterval) {
       clearInterval(this.asteroidSpawnInterval)
-      this.asteroidsInterval = null
+      this.asteroidSpawnInterval = null
     }
   }
 
@@ -126,7 +156,6 @@ export class Game {
       this.bulletsCounter.update(this.bulletsLeft)
     }
   }
-
 
   isColliding (sprite1, sprite2) {
     if (!sprite1 || !sprite2) return false
@@ -142,15 +171,20 @@ export class Game {
   checkCollisions () {
     this.bullets.forEach((bullet) => {
       this.asteroids.forEach((asteroid) => {
-        if (this.isColliding(bullet.getBulletCords(), asteroid.getAsteroidCords())) {
-          this.desrtoyedAsteroids ++
+        if (this.isColliding(bullet.getBulletCords(),
+          asteroid.getAsteroidCords())) {
+          this.desrtoyedAsteroids++
           bullet.destroy()
           asteroid.destroy()
         }
       })
     })
-    if(this.desrtoyedAsteroids === this.asteroidAmound) {
+    if (this.desrtoyedAsteroids === this.asteroidAmound) {
       this.gameResult = 'youWin'
+
+      this.timer.stop()
+      this.timer.reset()
+
       this.showGameResult()
     }
   }
