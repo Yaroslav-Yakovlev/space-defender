@@ -13,7 +13,7 @@ export class Ship {
     this.canShot = true
     this.bulletsAmount = CONFIG.shipParams.bulletsAmount
 
-    this.sprite = new Sprite( Assets.get(CONFIG.assets.ship))
+    this.sprite = new Sprite(Assets.get(CONFIG.assets.ship))
     this.sprite.width = CONFIG.shipParams.width
     this.sprite.height = CONFIG.shipParams.height
     this.sprite.x = x
@@ -25,29 +25,30 @@ export class Ship {
   }
 
   setupControllers () {
-      this.keydownHandler = (event) => {
-        if (event.code === 'ArrowLeft') this.moveLeft = true
-        if (event.code === 'ArrowRight') this.moveRight = true
-        if (event.code === 'Space' && this.canShot) {
-          this.shoot()
-          this.canShot = false
-          setTimeout(() => (this.canShot = true), 300)
-        }
+    if (this.keydownHandler) return
+    this.keydownHandler = (event) => {
+      if (event.code === 'ArrowLeft') this.moveLeft = true
+      if (event.code === 'ArrowRight') this.moveRight = true
+      if (event.code === 'Space' && this.canShot) {
+        this.shoot()
+        this.canShot = false
+        setTimeout(() => (this.canShot = true), 300)
       }
-
-      this.keyupHandler = (event) => {
-        if (event.code === 'ArrowLeft') this.moveLeft = false
-        if (event.code === 'ArrowRight') this.moveRight = false
-      }
-
-      window.addEventListener('keydown', this.keydownHandler)
-      window.addEventListener('keyup', this.keyupHandler)
     }
 
-    removeControllers() {
-      window.removeEventListener('keydown', this.keydownHandler)
-      window.removeEventListener('keyup', this.keyupHandler)
+    this.keyupHandler = (event) => {
+      if (event.code === 'ArrowLeft') this.moveLeft = false
+      if (event.code === 'ArrowRight') this.moveRight = false
     }
+
+    window.addEventListener('keydown', this.keydownHandler)
+    window.addEventListener('keyup', this.keyupHandler)
+  }
+
+  removeControllers () {
+    window.removeEventListener('keydown', this.keydownHandler)
+    window.removeEventListener('keyup', this.keyupHandler)
+  }
 
   update () {
     if (!this.sprite) return
@@ -71,7 +72,7 @@ export class Ship {
     }
   }
 
-  isCanShoot() {
+  isCanShoot () {
     return !this.canShot || this.game.bulletsLeft <= 0 || !this.sprite
   }
 

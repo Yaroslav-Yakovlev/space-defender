@@ -32,8 +32,8 @@ export const CONFIG = {
     width: 250,
     height: 50,
     startGameText: 'Start Game',
-    restartGameText: 'Try Again',
-    nextLevelText: 'Next Level'
+    restartGameText: 'Try Again !',
+    nextLevelText: 'Next Level !'
   },
   assets: {
     background: background,
