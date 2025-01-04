@@ -1,4 +1,4 @@
-name: Lint Code
+name: CI
 
 on:
   push:
@@ -28,3 +28,7 @@ jobs:
 
       - name: Run ESLint
         run: npm run lint
+
+      - name : Test
+        run: npm run test
+        
