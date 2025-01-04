@@ -2,11 +2,11 @@ import { Application, Assets, Sprite } from 'pixi.js'
 import { CONFIG } from './config.js'
 import { assetsLoader } from '../assets/assetsLoader.js'
 import { Ship } from '../entities/Ship.js'
-import { Asteroid } from '../entities/Asteroid'
-import { BulletsCounter } from '../ui/bulletsCounter/BulletsCounter'
-import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer'
-import { Button } from '../ui/button/Button'
-import { ResultMessage } from '../ui/resultMessage/ResultMessage'
+import { Asteroid } from '../entities/Asteroid.js'
+import { BulletsCounter } from '../ui/bulletsCounter/BulletsCounter.js'
+import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer.js'
+import { Button } from '../ui/button/Button.js'
+import { ResultMessage } from '../ui/resultMessage/ResultMessage.js'
 
 export class Game {
   constructor () {
@@ -60,6 +60,7 @@ export class Game {
   startGame () {
     if (this.isGameRunning) return
 
+    this.hideCursor()
     this.clearAsteroidSpawner()
 
     this.isGameRunning = true
@@ -90,7 +91,16 @@ export class Game {
     this.createStarButton()
   }
 
+  hideCursor () {
+    this.app.canvas.style.cursor = 'none'
+  }
+
+  showCursor () {
+    this.app.canvas.style.cursor = 'default'
+  }
+
   showGameResult () {
+    this.showCursor()
     this.isGameRunning = false
     this.clearAsteroidSpawner()
     let resultText = CONFIG.resultMessage.messageText[this.gameResult]
@@ -202,7 +212,7 @@ export class Game {
 
   gameLoop () {
     this.ship.update()
-    this.asteroids.forEach(a => a.update())
+    this.asteroids.forEach((a) => a.update())
     this.bullets.forEach((b) => b.update())
 
     this.checkCollisions()
