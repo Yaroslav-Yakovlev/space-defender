@@ -7,8 +7,10 @@ export class BulletsCounter {
     this.bulletsLeft = bulletsLeft
     this.bulletsAmount = bulletsAmount
 
-    this.text = new Text(`Bullets: ${this.bulletsLeft} / ${this.bulletsAmount}`,
-      bulletsCounterStyle)
+    this.text = new Text({
+      text: `Bullets: ${this.bulletsLeft} / ${this.bulletsAmount}`,
+      style: bulletsCounterStyle
+    })
 
     this.text.x = 20
     this.text.y = 20
