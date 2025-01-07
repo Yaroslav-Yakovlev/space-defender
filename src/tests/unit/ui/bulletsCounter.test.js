@@ -1,6 +1,6 @@
 import { Application } from 'pixi.js'
 import { BulletsCounter } from '../../../ui/bulletsCounter/BulletsCounter.js'
-import { expect, jest, it, describe, beforeEach } from '@jest/globals'
+import { expect, it, describe, beforeEach } from '@jest/globals'
 
 describe('BulletsCounter', () => {
   let app
@@ -8,12 +8,10 @@ describe('BulletsCounter', () => {
 
   beforeEach(() => {
     app = new Application()
-    app.stage = { addChild : jest.fn() }
-
     bulletsCounter = new BulletsCounter(app, 10, 10)
   })
 
-  it('should initializes correctly', () => {
+  it('should initialize correctly', () => {
     expect(bulletsCounter.bulletsLeft).toBe(10)
     expect(bulletsCounter.bulletsAmount).toBe(10)
     expect(bulletsCounter.text.text).toBe('Bullets: 10 / 10')
