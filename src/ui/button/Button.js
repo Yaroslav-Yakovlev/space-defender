@@ -47,19 +47,15 @@ export class Button {
   }
 
   createButtonText () {
-    let textContent
-
-    if (this.buttonText === CONFIG.button.startGameText) {
-      textContent = CONFIG.button.startGameText
-    } else if (this.buttonText === CONFIG.resultMessage.messageText.youLose) {
-      textContent = CONFIG.button.restartGameText
-    } else if (this.buttonText === CONFIG.resultMessage.messageText.youWin) {
-      textContent = CONFIG.button.nextLevelText
-    } else {
-      textContent = this.buttonText
+    const textMap = {
+      [CONFIG.button.startGameText]: CONFIG.button.startGameText,
+      [CONFIG.resultMessage.messageText.youLose]: CONFIG.button.restartGameText,
+      [CONFIG.resultMessage.messageText.youWin]: CONFIG.button.nextLevelText
     }
 
-    const text = new Text(textContent, buttonStyle)
+    const textContent = textMap[this.buttonText] || this.buttonText
+
+    const text = new Text({ text: textContent, style: buttonStyle })
     text.anchor.set(0.5)
 
     return text
@@ -96,9 +92,16 @@ export class Button {
   onPointerDown () {
     if (this.isDestroyed) return
 
-    this.app.ticker.start()
-    let scaleSpeed = 0.09
+    this.animationButton(() => {
+      this.removeContainer()
+      this.handleGameAction()
+    })
+  }
 
+  animationButton (callback) {
+    this.app.ticker.start()
+
+    let scaleSpeed = 0.09
     this.onTick = () => {
       this.container.scale.x -= scaleSpeed
       this.container.scale.y -= scaleSpeed
@@ -107,19 +110,20 @@ export class Button {
         this.container.scale.y <= 0
 
       if (checkScale()) {
-        this.removeContainer()
-        if (this.buttonText === CONFIG.resultMessage.messageText.youLose) {
-          this.game.resetGame()
-        } else if (this.buttonText ===
-          CONFIG.resultMessage.messageText.youWin) {
-          console.log('Next')
-          // this.game.nextLevel() Implement logic
-        } else {
-          this.game.startGame()
-        }
+        callback()
       }
     }
     this.app.ticker.add(this.onTick)
+  }
+
+  handleGameAction () {
+    if (this.buttonText === CONFIG.resultMessage.messageText.youLose) {
+      this.game.resetGame()
+    } else if (this.buttonText === CONFIG.resultMessage.messageText.youWin) {
+      console.log('this.game.nextLevel()')
+    } else {
+      this.game.startGame()
+    }
   }
 
   removeContainer () {

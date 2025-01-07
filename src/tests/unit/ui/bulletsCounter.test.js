@@ -1,5 +1,5 @@
 import { Application } from 'pixi.js'
-import { BulletsCounter } from '../../ui/bulletsCounter/BulletsCounter.js'
+import { BulletsCounter } from '../../../ui/bulletsCounter/BulletsCounter.js'
 import { expect, jest, it, describe, beforeEach } from '@jest/globals'
 
 describe('BulletsCounter', () => {
