@@ -3,9 +3,9 @@ import { buttonStyle } from './buttonStyle.js'
 import { CONFIG } from '../../app/config.js'
 
 export class Button {
-  constructor (app, buttonText, game) {
+  constructor (app, resultMessageText, game) {
     this.app = app
-    this.buttonText = buttonText
+    this.resultMessageText = resultMessageText
     this.game = game
     this.isDestroyed = false
     this.initButton()
@@ -13,8 +13,8 @@ export class Button {
 
   isRestartOrNextLevelButton () {
     return (
-      this.buttonText === CONFIG.resultMessage.messageText.youLose ||
-      this.buttonText === CONFIG.resultMessage.messageText.youWin
+      this.resultMessageText === CONFIG.resultMessage.messageText.youLose ||
+      this.resultMessageText === CONFIG.resultMessage.messageText.youWin
     )
   }
 
@@ -53,12 +53,12 @@ export class Button {
       [CONFIG.resultMessage.messageText.youWin]: CONFIG.button.nextLevelText
     }
 
-    const textContent = textMap[this.buttonText] || this.buttonText
+    const textContent = textMap[this.resultMessageText] || this.resultMessageText
 
-    const text = new Text({ text: textContent, style: buttonStyle })
-    text.anchor.set(0.5)
+    const buttonText = new Text({ text: textContent, style: buttonStyle })
+    buttonText.anchor.set(0.5)
 
-    return text
+    return buttonText
   }
 
   eventListeners () {
@@ -117,9 +117,9 @@ export class Button {
   }
 
   handleGameAction () {
-    if (this.buttonText === CONFIG.resultMessage.messageText.youLose) {
+    if (this.resultMessageText === CONFIG.resultMessage.messageText.youLose) {
       this.game.resetGame()
-    } else if (this.buttonText === CONFIG.resultMessage.messageText.youWin) {
+    } else if (this.resultMessageText === CONFIG.resultMessage.messageText.youWin) {
       console.log('this.game.nextLevel()')
     } else {
       this.game.startGame()
