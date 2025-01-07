@@ -16,6 +16,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
+        ...globals.node,
         require: 'readonly',
         module: 'readonly',
         __dirname: 'readonly'
@@ -26,11 +27,16 @@ export default [
     files: ['*.test.js'],
     languageOptions: {
       globals: {
-        ...globals.jest
+        ...globals.jest,
+        ...globals.node,
       }
     },
     plugins: {
       jest
+    },
+    env: {
+      jest: true,
+      node: true
     },
     rules: {
       ...jest.configs.recommended.rules
