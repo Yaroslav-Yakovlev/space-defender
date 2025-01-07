@@ -49,6 +49,9 @@ export class Asteroid {
     this.sprite.texture = Assets.get(CONFIG.assets.destroyedAsteroid)
 
     fadeOutAndRemoveSprite(this.sprite, this.app)
-    this.sprite = null
+
+    setTimeout(() => {
+      this.sprite = null
+    }, 500)
   }
 }
