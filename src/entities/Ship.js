@@ -27,8 +27,14 @@ export class Ship {
   setupControllers () {
     if (this.keydownHandler) return
     this.keydownHandler = (event) => {
-      if (event.code === 'ArrowLeft') this.moveLeft = true
-      if (event.code === 'ArrowRight') this.moveRight = true
+      if (event.code === 'ArrowLeft') {
+        this.moveLeft = true
+        this.moveRight = false
+      }
+      if (event.code === 'ArrowRight') {
+        this.moveRight = true
+        this.moveLeft = false
+      }
       if (event.code === 'Space' && this.canShot) {
         this.shoot()
         this.canShot = false
