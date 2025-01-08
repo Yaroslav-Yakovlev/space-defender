@@ -14,8 +14,7 @@ export class ResultMessage {
     this.container = new Container()
 
     this.container.addChild(this.createBorder())
-    this.text = this.createText()
-    this.container.addChild(this.text)
+    this.container.addChild(this.createText())
 
     this.container.x = CONFIG.screen.width / 2
     this.container.y = CONFIG.screen.height / 2
@@ -28,15 +27,13 @@ export class ResultMessage {
     const borderHeight = CONFIG.resultMessage.border.height
     const borderRadius = CONFIG.resultMessage.border.radius
 
-    const border = new Graphics().roundRect(
+    return new Graphics().roundRect(
       -borderWidth / 2,
       (borderHeight / 2) - borderHeight,
       borderWidth,
       borderHeight,
       borderRadius
     ).stroke({ width: 4, color: CONFIG.resultMessage.border.borderColor })
-
-    return border
   }
 
   createText () {
