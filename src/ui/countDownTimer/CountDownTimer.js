@@ -18,8 +18,10 @@ export class CountDownTimer {
   }
 
   createText () {
-    return new Text(`Time left: ${this.remainingTime}`,
-      CountDownTimerStyle)
+    return new Text({
+      text: `Time left: ${this.remainingTime}`,
+      style: CountDownTimerStyle
+    })
   }
 
   start () {

@@ -37,7 +37,10 @@ export class ResultMessage {
   }
 
   createText () {
-    const text = new Text(this.messageText, resultMessageStyle)
+    const text = new Text({
+      text: this.messageText,
+      style: resultMessageStyle
+    })
     text.anchor.set(0.5)
 
     return text

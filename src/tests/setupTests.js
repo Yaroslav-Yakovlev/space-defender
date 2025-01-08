@@ -35,8 +35,8 @@ jest.mock('pixi.js', () => {
       anchor: { set: jest.fn() },
       alpha: 1
     })),
-    Text: jest.fn((text) => ({
-      text: text,
+    Text: jest.fn((props) => ({
+      text: props.text,
       anchor: { set: jest.fn() }
     })),
     Assets: {
