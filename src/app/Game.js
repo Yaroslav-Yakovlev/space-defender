@@ -118,7 +118,6 @@ export class Game {
       this.ship.removeControllers()
     }
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
-    this.ship.setupControllers()
   }
 
   createCountDownTimer () {

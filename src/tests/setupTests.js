@@ -33,7 +33,8 @@ jest.mock('pixi.js', () => {
     })),
     Sprite: jest.fn(() => ({
       anchor: { set: jest.fn() },
-      alpha: 1
+      alpha: 1,
+      rotation: 0
     })),
     Text: jest.fn((props) => ({
       text: props.text,
