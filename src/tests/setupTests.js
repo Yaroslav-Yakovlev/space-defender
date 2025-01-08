@@ -16,6 +16,10 @@ jest.mock('pixi.js', () => {
         start: jest.fn(),
         add: jest.fn(),
         remove: jest.fn()
+      },
+      screen: {
+        width: 1280,
+        height: 720
       }
     })),
     Container: jest.fn(() => ({
