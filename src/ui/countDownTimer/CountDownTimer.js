@@ -9,8 +9,7 @@ export class CountDownTimer {
     this.onTimeChange = onTimeChange
     this.interval = null
 
-    this.timerText = new Text(`Time left: ${this.remainingTime}`,
-      CountDownTimerStyle)
+    this.timerText = this.createText()
 
     this.timerText.x = app.screen.width - this.timerText.width - 20
     this.timerText.y = 20
@@ -18,11 +17,15 @@ export class CountDownTimer {
     this.app.stage.addChild(this.timerText)
   }
 
+  createText () {
+    return new Text(`Time left: ${this.remainingTime}`,
+      CountDownTimerStyle)
+  }
+
   start () {
     if (this.interval) return
     this.interval = setInterval(() => {
-      this.remainingTime--
-      this.timerText.text = `Time left: ${this.remainingTime}`
+      this.timerText.text = `Time left: ${this.remainingTime--}`
       if (this.onTimeChange) {
         this.onTimeChange(this.remainingTime)
       }

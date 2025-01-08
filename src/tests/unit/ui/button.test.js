@@ -31,14 +31,14 @@ describe('Button', () => {
 
   it('should have correct text button when player lose', () => {
     const button = new Button(app, 'You Lose!', mockGame)
-    const buttonText = button.createButtonText().text
+    const buttonText = button.createButtonText().text.text
 
     expect(buttonText).toBe('Try Again !')
   })
 
   it('should have correct text button when player win', () => {
     const button = new Button(app, 'You Win!', mockGame)
-    const buttonText = button.createButtonText().text
+    const buttonText = button.createButtonText().text.text
 
     expect(buttonText).toBe('Next Level !')
   })

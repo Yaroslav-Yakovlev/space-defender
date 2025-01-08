@@ -16,6 +16,10 @@ jest.mock('pixi.js', () => {
         start: jest.fn(),
         add: jest.fn(),
         remove: jest.fn()
+      },
+      screen: {
+        width: 1280,
+        height: 720
       }
     })),
     Container: jest.fn(() => ({
@@ -31,8 +35,8 @@ jest.mock('pixi.js', () => {
       anchor: { set: jest.fn() },
       alpha: 1
     })),
-    Text: jest.fn((props) => ({
-      text: props.text,
+    Text: jest.fn((text) => ({
+      text: text,
       anchor: { set: jest.fn() }
     })),
     Assets: {
