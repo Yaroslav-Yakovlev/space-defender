@@ -31,6 +31,13 @@ jest.mock('pixi.js', () => {
       cursor: 'default',
       on: jest.fn()
     })),
+    Graphics: jest.fn(() => ({
+      rect: jest.fn(),
+      roundRect: jest.fn(),
+      stroke: jest.fn().mockReturnThis(),
+      fill: jest.fn(),
+      destroy: jest.fn()
+    })),
     Sprite: jest.fn(() => ({
       anchor: { set: jest.fn() },
       alpha: 1,
@@ -49,22 +56,6 @@ jest.mock('pixi.js', () => {
 global.window = {
   addEventListener: jest.fn(),
   removeEventListener: jest.fn()
-}
-
-global.document = {
-  createElement: jest.fn().mockReturnValue({
-    getContext: jest.fn().mockReturnValue({
-      fillRect: jest.fn(),
-      setTransform: jest.fn(),
-      fillText: jest.fn(),
-      stroke: jest.fn(),
-      scale: jest.fn(),
-      rotate: jest.fn(),
-      fill: jest.fn(),
-      transform: jest.fn(),
-      rect: jest.fn()
-    })
-  })
 }
 
 global.localStorage = {
