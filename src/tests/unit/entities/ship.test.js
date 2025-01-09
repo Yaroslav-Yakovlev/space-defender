@@ -1,7 +1,7 @@
 import { beforeEach, describe, it, jest, expect } from '@jest/globals'
 import { Application } from 'pixi.js'
-import { Ship } from '../../entities/Ship.js'
-import { Bullet } from '../../entities/Bullet.js'
+import { Ship } from '../../../entities/Ship.js'
+import { Bullet } from '../../../entities/Bullet.js'
 
 describe('Ship', () => {
   let app
@@ -66,5 +66,18 @@ describe('Ship', () => {
   it('should destroy the ship', () => {
     ship.destroy()
     expect(ship.sprite).toBeNull()
+  })
+
+  it('should get ship coordinates', () => {
+    const bounds = {
+      x: 100,
+      y: 100,
+      width: 100,
+      height: 100
+    }
+
+    ship.sprite.getBounds = jest.fn().mockReturnValue(bounds)
+    const cords = ship.getShipCords()
+    expect(cords).toEqual(bounds)
   })
 })
