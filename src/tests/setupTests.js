@@ -31,6 +31,11 @@ jest.mock('pixi.js', () => {
       cursor: 'default',
       on: jest.fn()
     })),
+    Graphics: jest.fn(() => ({
+      rect: jest.fn(),
+      fill: jest.fn(),
+      destroy: jest.fn()
+    })),
     Sprite: jest.fn(() => ({
       anchor: { set: jest.fn() },
       alpha: 1,
