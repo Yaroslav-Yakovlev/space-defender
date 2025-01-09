@@ -27,13 +27,17 @@ export class ResultMessage {
     const borderHeight = CONFIG.resultMessage.border.height
     const borderRadius = CONFIG.resultMessage.border.radius
 
-    return new Graphics().roundRect(
+    const graphic = new Graphics()
+    graphic.roundRect(
       -borderWidth / 2,
       (borderHeight / 2) - borderHeight,
       borderWidth,
       borderHeight,
       borderRadius
-    ).stroke({ width: 4, color: CONFIG.resultMessage.border.borderColor })
+    )
+    graphic.stroke({ width: 4, color: CONFIG.resultMessage.border.borderColor })
+
+    return graphic
   }
 
   createText () {
