@@ -13,8 +13,7 @@ describe('Asteroid', () => {
   beforeEach(() => {
     app = new Application()
     mockGame = {
-      gameResult: '',
-      showGameResult: jest.fn()
+      endGameAndMessage: jest.fn()
     }
 
     asteroid = new Asteroid(app, mockGame)
@@ -43,8 +42,7 @@ describe('Asteroid', () => {
     jest.advanceTimersByTime(501)
 
     expect(asteroid.sprite).toBeNull()
-    expect(mockGame.gameResult).toBe('youLose')
-    expect(mockGame.showGameResult).toHaveBeenCalled()
+    expect(mockGame.endGameAndMessage).toHaveBeenCalled()
   })
 
   it('should get asteroid coordinate', () => {

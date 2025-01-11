@@ -27,8 +27,7 @@ export class Asteroid {
 
     if (this.sprite.y > this.app.screen.height + this.sprite.height) {
       this.destroy()
-      this.game.gameResult = 'youLose'
-      this.game.showGameResult()
+      this.game.endGameAndMessage('youLose')
     }
   }
 
