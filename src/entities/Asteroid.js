@@ -1,6 +1,6 @@
 import { Assets, Sprite } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
-import { fadeOutAndRemoveSprite } from '../app/utils.js'
+import { fadeOutAndRemoveSprite, getBoundCords } from '../app/utils.js'
 
 export class Asteroid {
   constructor (app, game) {
@@ -33,15 +33,7 @@ export class Asteroid {
   }
 
   getAsteroidCords () {
-    if (!this.sprite) return null
-    const bounds = this.sprite.getBounds()
-
-    return {
-      x: bounds.x,
-      y: bounds.y,
-      width: bounds.width,
-      height: bounds.height
-    }
+    return getBoundCords(this.sprite)
   }
 
   destroy () {

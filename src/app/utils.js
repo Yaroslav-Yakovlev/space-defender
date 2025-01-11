@@ -14,3 +14,15 @@ export function fadeOutAndRemoveSprite (sprite, app) {
 
   app.ticker.add(fadeTicker)
 }
+
+export function getBoundCords (graphic) {
+  if (!graphic) return null
+  const bounds = graphic.getBounds()
+
+  return {
+    x: bounds.x,
+    y: bounds.y,
+    width: bounds.width,
+    height: bounds.height
+  }
+}

@@ -1,5 +1,6 @@
 import { Graphics } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
+import { getBoundCords } from '../app/utils.js'
 
 export class Bullet {
   constructor (app, x, y) {
@@ -26,15 +27,7 @@ export class Bullet {
   }
 
   getBulletCords () {
-    if (!this.graphic) return
-    const bounds = this.graphic.getBounds()
-
-    return {
-      x: bounds.x,
-      y: bounds.y,
-      width: bounds.width,
-      height: bounds.height
-    }
+    return getBoundCords(this.graphic)
   }
 
   destroy () {
