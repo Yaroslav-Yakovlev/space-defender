@@ -1,7 +1,7 @@
 import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
 import { Bullet } from './Bullet.js'
-import { fadeOutAndRemoveSprite } from '../app/utils.js'
+import { fadeOutAndRemoveSprite, getBoundCords } from '../app/utils.js'
 
 export class Ship {
   constructor (app, x, y, game) {
@@ -98,15 +98,7 @@ export class Ship {
   }
 
   getShipCords () {
-    if (!this.sprite) return null
-
-    const bounds = this.sprite.getBounds()
-    return {
-      x: bounds.x,
-      y: bounds.y,
-      width: bounds.width,
-      height: bounds.height
-    }
+    return getBoundCords(this.sprite)
   }
 
   destroy () {

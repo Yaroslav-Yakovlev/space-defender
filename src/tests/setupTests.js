@@ -20,7 +20,9 @@ jest.mock('pixi.js', () => {
       screen: {
         width: 1280,
         height: 720
-      }
+      },
+      init: jest.fn(),
+      canvas: {}
     })),
     Container: jest.fn(() => ({
       addChild: jest.fn(),
@@ -48,6 +50,7 @@ jest.mock('pixi.js', () => {
       anchor: { set: jest.fn() }
     })),
     Assets: {
+      load: jest.fn(),
       get: jest.fn()
     }
   }
