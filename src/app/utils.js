@@ -15,9 +15,9 @@ export function fadeOutAndRemoveSprite (sprite, app) {
   app.ticker.add(fadeTicker)
 }
 
-export function getBoundCords (graphic) {
-  if (!graphic) return null
-  const bounds = graphic.getBounds()
+export function getBoundCords (sprite) {
+  if (!sprite) return null
+  const bounds = sprite.getBounds()
 
   return {
     x: bounds.x,

@@ -30,7 +30,7 @@ export class BossHP {
     })
 
     this.hpIcons.x = this.boss.sprite.x - this.hpIcons.width / 2
-    this.hpIcons.y = this.boss.sprite.y - 40
+    this.hpIcons.y = this.boss.sprite.y - 85
   }
 
   destroy () {

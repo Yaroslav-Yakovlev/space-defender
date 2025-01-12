@@ -6,6 +6,7 @@ import background from '../assets/images/background.png'
 import button from '../assets/ui/buttonYellow.png'
 import boss from '../assets/images/enemyBlack1.png'
 import bossHP from '../assets/images/powerupRed_bolt.png'
+import destroyedBossShip from '../assets/images/playerShip3_damage3.png'
 
 export const CONFIG = {
   screen: {
@@ -14,9 +15,9 @@ export const CONFIG = {
   },
   game: {
     asteroidsInterval: 2000,
-    asteroidAmount: 10,
+    asteroidAmount: 1,
     bulletsAmount: 10,
-    gameDuration: 60,
+    gameDuration: 6,
   },
   resultMessage: {
     border: {
@@ -45,7 +46,8 @@ export const CONFIG = {
     destroyedShip: destroyedShip,
     button: button,
     boss: boss,
-    bossHP: bossHP
+    bossHP: bossHP,
+    destroyedBossShip: destroyedBossShip
   },
   shipParams: {
     width: 70,

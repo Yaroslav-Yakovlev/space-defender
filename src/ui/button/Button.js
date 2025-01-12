@@ -120,10 +120,9 @@ export class Button {
     if (this.resultMessageText === CONFIG.resultMessage.messageText.youLose) {
       this.game.resetGame()
     } else if (this.resultMessageText === CONFIG.resultMessage.messageText.youWin) {
-      console.log('this.game.nextLevel()')
-    } else {
-      // this.game.startGame()
       this.game.levelWithBoss()
+    } else {
+      this.game.startGame()
     }
   }
 
