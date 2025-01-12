@@ -5,6 +5,7 @@ import destroyedShip from '../assets/images/playerShip1_damage3.png'
 import background from '../assets/images/background.png'
 import button from '../assets/ui/buttonYellow.png'
 import boss from '../assets/images/enemyBlack1.png'
+import bossHP from '../assets/images/powerupRed_bolt.png'
 
 export const CONFIG = {
   screen: {
@@ -43,7 +44,8 @@ export const CONFIG = {
     destroyedAsteroid: destroyedAsteroid,
     destroyedShip: destroyedShip,
     button: button,
-    boss: boss
+    boss: boss,
+    bossHP: bossHP
   },
   shipParams: {
     width: 70,
@@ -52,9 +54,10 @@ export const CONFIG = {
     maxRotation: 0.2,
     rotationSpeed: 0.05
   },
-  bossParams: {
-    width: 100,
-    height: 100
+  bossShipParams: {
+    width: 120,
+    height: 120,
+    hp: 4
   },
   bullet: {
     height: 8,
