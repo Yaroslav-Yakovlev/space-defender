@@ -12,8 +12,8 @@ export class BulletsCounter {
       style: bulletsCounterStyle
     })
 
-    this.text.x = 20
-    this.text.y = 20
+    this.text.x = 5
+    this.text.y = 5
     this.app.stage.addChild(this.text)
   }
 

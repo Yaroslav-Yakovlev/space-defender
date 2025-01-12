@@ -8,6 +8,7 @@ import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer.js'
 import { Button } from '../ui/button/Button.js'
 import { ResultMessage } from '../ui/resultMessage/ResultMessage.js'
 import { gameStyles } from '../styles/gameStyles.js'
+import { Boss } from '../entities/Boss.js'
 
 export class Game {
   constructor () {
@@ -35,7 +36,7 @@ export class Game {
 
     this.loadBackground()
     this.checkCollisions()
-    this.createStarButton()
+    this.createStartButton()
 
     this.app.ticker.add(() => {
       if (this.isGameRunning) this.gameLoop()
@@ -50,7 +51,7 @@ export class Game {
     this.app.stage.addChild(background)
   }
 
-  createStarButton () {
+  createStartButton () {
     new Button(this.app, CONFIG.button.startGameText, this)
   }
 
@@ -59,9 +60,9 @@ export class Game {
 
     this.hideCursor()
     this.clearAsteroidSpawner()
-
     this.isGameRunning = true
     this.app.stage.removeChildren()
+
     this.loadBackground()
     this.loadShip()
     this.createBulletsCounter()
@@ -85,7 +86,24 @@ export class Game {
 
     this.app.stage.removeChildren()
     this.loadBackground()
-    this.createStarButton()
+    this.createStartButton()
+  }
+
+  levelWithBoss () {
+    if (this.isGameRunning) return
+    this.isGameRunning = true
+
+    this.hideCursor()
+    this.clearAsteroidSpawner()
+    this.loadBackground()
+    this.loadBoss()
+    this.loadShip()
+    this.createBulletsCounter()
+    this.createCountDownTimer()
+  }
+
+  loadBoss () {
+    new Boss(this.app, this)
   }
 
   hideCursor () {
