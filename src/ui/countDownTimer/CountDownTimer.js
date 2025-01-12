@@ -11,8 +11,8 @@ export class CountDownTimer {
 
     this.timerText = this.createText()
 
-    this.timerText.x = app.screen.width - this.timerText.width - 20
-    this.timerText.y = 20
+    this.timerText.x = app.screen.width - this.timerText.width - 5
+    this.timerText.y = 5
 
     this.app.stage.addChild(this.timerText)
   }

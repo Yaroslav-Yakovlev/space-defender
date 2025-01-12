@@ -8,6 +8,7 @@ import { CountDownTimer } from '../ui/countDownTimer/CountDownTimer.js'
 import { Button } from '../ui/button/Button.js'
 import { ResultMessage } from '../ui/resultMessage/ResultMessage.js'
 import { gameStyles } from '../styles/gameStyles.js'
+import { Boss } from '../entities/Boss.js'
 
 export class Game {
   constructor () {
@@ -23,6 +24,7 @@ export class Game {
     this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
     this.isGameRunning = false
     this.gameResultMessage = ''
+    this.isBossLevel = false
   }
 
   async setup () {
@@ -35,7 +37,7 @@ export class Game {
 
     this.loadBackground()
     this.checkCollisions()
-    this.createStarButton()
+    this.createStartButton()
 
     this.app.ticker.add(() => {
       if (this.isGameRunning) this.gameLoop()
@@ -50,7 +52,7 @@ export class Game {
     this.app.stage.addChild(background)
   }
 
-  createStarButton () {
+  createStartButton () {
     new Button(this.app, CONFIG.button.startGameText, this)
   }
 
@@ -59,9 +61,9 @@ export class Game {
 
     this.hideCursor()
     this.clearAsteroidSpawner()
-
     this.isGameRunning = true
     this.app.stage.removeChildren()
+
     this.loadBackground()
     this.loadShip()
     this.createBulletsCounter()
@@ -71,21 +73,41 @@ export class Game {
 
   resetGame () {
     this.clearAsteroidSpawner()
-    this.timer.reset()
+    if (this.timer) this.timer.reset()
     this.asteroids.forEach((asteroid) => asteroid.destroy())
     this.bullets.forEach((bullet) => bullet.destroy())
 
     this.asteroids = []
     this.bullets = []
 
-    this.bulletsLeft = this.asteroidAmound
+    this.bulletsLeft = CONFIG.game.bulletsAmount
+
     this.desrtoyedAsteroids = 0
     this.gameResultMessage = ''
     this.isGameRunning = false
 
     this.app.stage.removeChildren()
     this.loadBackground()
-    this.createStarButton()
+    this.createStartButton()
+  }
+
+  levelWithBoss () {
+    this.resetGame()
+    this.hideCursor()
+
+    this.loadBackground()
+    this.loadBoss()
+    this.loadShip()
+    this.createBulletsCounter()
+    this.createCountDownTimer()
+
+    this.isGameRunning = true
+    this.isBossLevel = true
+    this.app.ticker.start()
+  }
+
+  loadBoss () {
+    this.boss = new Boss(this.app, this)
   }
 
   hideCursor () {
@@ -97,6 +119,7 @@ export class Game {
   }
 
   showGameResultMessage () {
+    if (this.isBossLevel) return
     this.showCursor()
     this.isGameRunning = false
     this.clearAsteroidSpawner()
@@ -113,6 +136,7 @@ export class Game {
   loadShip () {
     if (this.ship) this.ship.removeControllers()
     this.ship = new Ship(this.app, this.shipX, this.shipY, this)
+    this.ship.setupControllers()
   }
 
   createCountDownTimer () {
@@ -179,7 +203,14 @@ export class Game {
           asteroid.destroy()
         }
       })
+
+      if (this.boss &&
+        this.isColliding(bullet.getBulletCords(), this.boss.getBossCoords())) {
+        bullet.destroy()
+        this.boss.takeDamage()
+      }
     })
+
     if (this.desrtoyedAsteroids === this.asteroidAmound) {
       this.endGameAndMessage('youWin')
     }
@@ -207,6 +238,8 @@ export class Game {
     this.ship.update()
     this.asteroids.forEach((a) => a.update())
     this.bullets.forEach((b) => b.update())
+
+    if (this.isBossLevel && this.boss) this.boss.update()
 
     this.checkCollisions()
     this.checkShipCollision()

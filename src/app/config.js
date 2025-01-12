@@ -4,6 +4,9 @@ import destroyedAsteroid from '../assets/images/destroyed meteor.png'
 import destroyedShip from '../assets/images/playerShip1_damage3.png'
 import background from '../assets/images/background.png'
 import button from '../assets/ui/buttonYellow.png'
+import boss from '../assets/images/enemyBlack1.png'
+import bossHP from '../assets/images/powerupRed_bolt.png'
+import destroyedBossShip from '../assets/images/playerShip3_damage3.png'
 
 export const CONFIG = {
   screen: {
@@ -12,9 +15,9 @@ export const CONFIG = {
   },
   game: {
     asteroidsInterval: 2000,
-    asteroidAmount: 10,
+    asteroidAmount: 1,
     bulletsAmount: 10,
-    gameDuration: 60,
+    gameDuration: 6,
   },
   resultMessage: {
     border: {
@@ -41,7 +44,10 @@ export const CONFIG = {
     asteroid: asteroid,
     destroyedAsteroid: destroyedAsteroid,
     destroyedShip: destroyedShip,
-    button: button
+    button: button,
+    boss: boss,
+    bossHP: bossHP,
+    destroyedBossShip: destroyedBossShip
   },
   shipParams: {
     width: 70,
@@ -49,6 +55,11 @@ export const CONFIG = {
     speed: 7,
     maxRotation: 0.2,
     rotationSpeed: 0.05
+  },
+  bossShipParams: {
+    width: 120,
+    height: 120,
+    hp: 4
   },
   bullet: {
     height: 8,

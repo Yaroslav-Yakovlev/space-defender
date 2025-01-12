@@ -7,10 +7,10 @@ export class ResultMessage {
     this.app = app
     this.messageText = messageText
 
-    this.initText()
+    this.createContainer()
   }
 
-  initText () {
+  createContainer () {
     this.container = new Container()
 
     this.container.addChild(this.createBorder())

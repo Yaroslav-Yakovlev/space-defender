@@ -5,6 +5,9 @@ import asteroid from './images/meteorBrown_big3.png'
 import destroyedAsteroid from './images/destroyed meteor.png'
 import destroyedShip from './images/playerShip1_damage3.png'
 import button from './ui/buttonYellow.png'
+import boss from './images/enemyBlack1.png'
+import bossHP from './images/powerupRed_bolt.png'
+import destroyedBossShip from './images/playerShip3_damage3.png'
 
 export async function assetsLoader () {
   const assets = [
@@ -13,7 +16,10 @@ export async function assetsLoader () {
     { name: 'asteroid', src: asteroid },
     { name: 'destroyed asteroid', src: destroyedAsteroid },
     { name: 'destroyed ship', src: destroyedShip },
-    { name: 'button', src: button }
+    { name: 'button', src: button },
+    { name: 'boss', src: boss },
+    { name: 'bossHP', src: bossHP },
+    { name: 'destroyed boss ship', src: destroyedBossShip }
   ]
 
   try {
