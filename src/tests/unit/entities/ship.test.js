@@ -3,6 +3,8 @@ import { Application } from 'pixi.js'
 import { Ship } from '../../../entities/Ship.js'
 import { Bullet } from '../../../entities/Bullet.js'
 
+jest.useFakeTimers()
+
 describe('Ship', () => {
   let app
   let ship
@@ -63,8 +65,9 @@ describe('Ship', () => {
     expect(ship.sprite.rotation).toBeGreaterThan(0)
   })
 
-  it('should destroy the ship', () => {
+  it('should destroy the ship',() => {
     ship.destroy()
+    jest.advanceTimersByTime(501)
     expect(ship.sprite).toBeNull()
   })
 

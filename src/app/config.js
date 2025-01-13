@@ -15,9 +15,9 @@ export const CONFIG = {
   },
   game: {
     asteroidsInterval: 2000,
-    asteroidAmount: 1,
+    asteroidAmount: 10,
     bulletsAmount: 10,
-    gameDuration: 6,
+    gameDuration: 60,
   },
   resultMessage: {
     border: {

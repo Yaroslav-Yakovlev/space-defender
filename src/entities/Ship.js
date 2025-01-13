@@ -1,7 +1,7 @@
 import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
 import { Bullet } from './Bullet.js'
-import { fadeOutAndRemoveSprite, getBoundCords } from '../app/utils.js'
+import { destroyEntity, getBoundCords } from '../app/utils.js'
 
 export class Ship {
   constructor (app, x, y, game) {
@@ -103,9 +103,7 @@ export class Ship {
 
   destroy () {
     this.removeControllers()
-    this.sprite.texture = Assets.get(CONFIG.assets.destroyedShip)
-
-    fadeOutAndRemoveSprite(this.sprite, this.app)
-    this.sprite = null
+    destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedShip,
+      () => this.sprite = null)
   }
 }

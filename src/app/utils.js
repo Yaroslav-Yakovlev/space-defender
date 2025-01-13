@@ -1,3 +1,5 @@
+import { Assets } from 'pixi.js'
+
 export function fadeOutAndRemoveSprite (sprite, app) {
   if (!sprite) return
   let fadeSpeed = 0.02
@@ -25,4 +27,15 @@ export function getBoundCords (sprite) {
     width: bounds.width,
     height: bounds.height
   }
+}
+
+export function destroyEntity (sprite, app, destroyedTexture, onRemove) {
+  if (!sprite) return
+
+  sprite.texture = Assets.get(destroyedTexture)
+  fadeOutAndRemoveSprite(sprite, app)
+
+  setTimeout(() => {
+    if (onRemove) onRemove()
+  }, 500)
 }

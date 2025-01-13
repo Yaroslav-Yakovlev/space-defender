@@ -1,6 +1,6 @@
 import { Assets, Sprite } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
-import { fadeOutAndRemoveSprite, getBoundCords } from '../app/utils.js'
+import { destroyEntity, getBoundCords } from '../app/utils.js'
 
 export class Asteroid {
   constructor (app, game) {
@@ -36,14 +36,8 @@ export class Asteroid {
   }
 
   destroy () {
-    if (!this.sprite) return
-
-    this.sprite.texture = Assets.get(CONFIG.assets.destroyedAsteroid)
-
-    fadeOutAndRemoveSprite(this.sprite, this.app)
-
-    setTimeout(() => {
-      this.sprite = null
-    }, 500)
+    destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedAsteroid,
+      () => this.sprite = null
+    )
   }
 }

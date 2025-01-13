@@ -1,7 +1,7 @@
 import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
 import { BossHP } from '../ui/bossHP/BossHP.js'
-import { fadeOutAndRemoveSprite, getBoundCords } from '../app/utils.js'
+import { destroyEntity, getBoundCords } from '../app/utils.js'
 
 export class Boss {
   constructor (app, game) {
@@ -39,15 +39,9 @@ export class Boss {
   }
 
   destroy () {
-    if(!this.sprite) return
-    console.log('Boss Die')
-    this.sprite.texture = Assets.get(CONFIG.assets.destroyedBossShip)
-
-    fadeOutAndRemoveSprite(this.sprite, this.app)
-
-    setTimeout(() => {
-      this.sprite = null
-    }, 500)
+    destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedBossShip,
+      () => this.sprite = null
+    )
   }
 
   update () {
