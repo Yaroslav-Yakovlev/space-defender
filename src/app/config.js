@@ -16,7 +16,8 @@ export const CONFIG = {
   game: {
     asteroidsInterval: 1700,
     bossBulletsInterval: 2000,
-    asteroidAmount: 10,
+    playerBulletsInterval: 500,
+    asteroidAmount: 1,
     bulletsAmount: 10,
     gameDuration: 60
   },
@@ -77,7 +78,7 @@ export const CONFIG = {
   asteroidParams: {
     height: 80,
     width: 80,
-    minSpeed: 3,
+    minSpeed: 4,
     maxSpeed: 6,
     rotationSpeed: Math.random() * 0.1 - 0.03,
     getAsteroidSpeed () {

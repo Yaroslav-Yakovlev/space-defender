@@ -8,8 +8,8 @@ export class Boss {
   constructor (app, game) {
     this.app = app
     this.game = game
-    this.canShot = true
     this.hp = CONFIG.bossShipParams.hp
+    this.bossBulletsInterval = CONFIG.game.bossBulletsInterval
 
     this.sprite = new Sprite(Assets.get(CONFIG.assets.boss))
     this.sprite.width = CONFIG.bossShipParams.width
@@ -23,7 +23,7 @@ export class Boss {
     this.phBar = new BossHP(this.app, this, this.hp)
 
     this.lastShotTime = 0
-    this.app.ticker.add(this.handleShooting.bind(this))
+    this.app.ticker.add(this.shooting.bind(this))
   }
 
   takeDamage () {
@@ -38,19 +38,15 @@ export class Boss {
     }
   }
 
-  shoot () {
-    new BossBullet(
-      this.app,
-      this.sprite.x - 4,
-      this.sprite.y + this.sprite.height / 2,
-      CONFIG.bossBullet
-    )
-  }
-
-  handleShooting () {
+  shooting () {
     const currentTime = performance.now()
-    if (currentTime - this.lastShotTime > 2000) {
-      this.shoot()
+    if (currentTime - this.lastShotTime > this.bossBulletsInterval) {
+      new BossBullet(
+        this.app,
+        this.sprite.x - 4,
+        this.sprite.y + this.sprite.height / 2,
+        CONFIG.bossBullet
+      )
       this.lastShotTime = currentTime
     }
   }
@@ -60,7 +56,10 @@ export class Boss {
   }
 
   destroy () {
-    destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedBossShip,
+    destroyEntity(
+      this.sprite,
+      this.app,
+      CONFIG.assets.destroyedBossShip,
       () => this.sprite = null
     )
   }

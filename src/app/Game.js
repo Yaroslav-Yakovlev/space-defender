@@ -25,6 +25,7 @@ export class Game {
     this.isGameRunning = false
     this.gameResultMessage = ''
     this.isBossLevel = false
+    this.lastAsteroidSpawnTime = 0
   }
 
   async setup () {
@@ -60,7 +61,6 @@ export class Game {
     if (this.isGameRunning) return
 
     this.hideCursor()
-    this.clearAsteroidSpawner()
     this.isGameRunning = true
     this.app.stage.removeChildren()
 
@@ -72,7 +72,6 @@ export class Game {
   }
 
   resetGame () {
-    this.clearAsteroidSpawner()
     if (this.timer) this.timer.reset()
     this.asteroids.forEach((asteroid) => asteroid.destroy())
     this.bullets.forEach((bullet) => bullet.destroy())
@@ -103,7 +102,6 @@ export class Game {
 
     this.isGameRunning = true
     this.isBossLevel = true
-    this.app.ticker.start()
   }
 
   loadBoss () {
@@ -122,7 +120,6 @@ export class Game {
     if (this.isBossLevel) return
     this.showCursor()
     this.isGameRunning = false
-    this.clearAsteroidSpawner()
     let resultText = CONFIG.resultMessage.messageText[this.gameResultMessage]
 
     new ResultMessage(this.app, resultText)
@@ -157,19 +154,14 @@ export class Game {
   }
 
   asteroidSpawner () {
-    if (!this.isGameRunning) return
-    this.asteroidSpawnInterval = setInterval(() => {
-      if (this.asteroids.length < this.asteroidAmound) {
-        this.asteroid = new Asteroid(this.app, this)
-        this.asteroids.push(this.asteroid)
-      }
-    }, this.asteroidsInterval)
-  }
+    if (this.isBossLevel) return
+    const currentTime = performance.now()
 
-  clearAsteroidSpawner () {
-    if (this.asteroidSpawnInterval) {
-      clearInterval(this.asteroidSpawnInterval)
-      this.asteroidSpawnInterval = null
+    if (currentTime - this.lastAsteroidSpawnTime > this.asteroidsInterval) {
+      if(this.asteroids.length < this.asteroidAmound) {
+        this.asteroids.push(new Asteroid(this.app, this))
+      }
+    this.lastAsteroidSpawnTime = currentTime
     }
   }
 
@@ -239,6 +231,8 @@ export class Game {
 
     this.asteroids.forEach((a) => a.update())
     this.bullets.forEach((b) => b.update())
+
+    this.asteroidSpawner()
 
     this.checkCollisions()
     this.checkShipCollision()

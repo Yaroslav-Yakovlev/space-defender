@@ -12,6 +12,8 @@ export class Ship {
     this.speed = CONFIG.shipParams.speed
     this.canShot = true
     this.bulletsAmount = CONFIG.shipParams.bulletsAmount
+    this.playerBulletsInterval = CONFIG.game.playerBulletsInterval
+    this.lastShotTime = 0
 
     this.sprite = new Sprite(Assets.get(CONFIG.assets.ship))
     this.sprite.width = CONFIG.shipParams.width
@@ -79,23 +81,23 @@ export class Ship {
   }
 
   canShoot () {
-    return !this.canShot || this.game.bulletsLeft <= 0 || !this.sprite
+    return this.game.bulletsLeft <= 0 || !this.sprite
   }
 
   shoot () {
     if (this.canShoot()) return
-    this.canShot = false
 
-    setTimeout(() => (this.canShot = true), 500)
-
-    const bullet = new PlayerBullet(
-      this.app,
-      this.sprite.x - 4,
-      this.sprite.y - (this.sprite.height / 2) - 12,
-      CONFIG.playerBullet
-    )
-
-    this.game.handleBulletFire(bullet)
+    const currentTime = performance.now()
+    if (currentTime - this.lastShotTime > this.playerBulletsInterval) {
+      const bullet = new PlayerBullet(
+        this.app,
+        this.sprite.x - 4,
+        this.sprite.y - (this.sprite.height / 2) - 12,
+        CONFIG.playerBullet
+      )
+      this.game.handleBulletFire(bullet)
+    }
+    this.lastShotTime = currentTime
   }
 
   getShipCords () {
