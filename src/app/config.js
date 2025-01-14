@@ -14,10 +14,11 @@ export const CONFIG = {
     height: 720
   },
   game: {
-    asteroidsInterval: 2000,
+    asteroidsInterval: 1700,
+    bossBulletsInterval: 2000,
     asteroidAmount: 10,
     bulletsAmount: 10,
-    gameDuration: 60,
+    gameDuration: 60
   },
   resultMessage: {
     border: {
@@ -52,7 +53,7 @@ export const CONFIG = {
   shipParams: {
     width: 70,
     height: 70,
-    speed: 7,
+    speed: 6,
     maxRotation: 0.2,
     rotationSpeed: 0.05
   },
@@ -61,11 +62,17 @@ export const CONFIG = {
     height: 120,
     hp: 4
   },
-  bullet: {
+  playerBullet: {
     height: 8,
     width: 16,
     color: 0x05bff2,
     speed: 6
+  },
+  bossBullet: {
+    height: 12,
+    width: 20,
+    color: 0xFF0000,
+    speed: 8
   },
   asteroidParams: {
     height: 80,

@@ -12,7 +12,7 @@ describe('Bullet', () => {
   beforeEach(() => {
     app = new Application()
     bullet = new Bullet(app, x, y)
-    bullet.graphic.height = CONFIG.bullet.height
+    bullet.graphic.height = CONFIG.playerBullet.height
   })
 
   it('should initialize correctly', () => {
@@ -21,8 +21,8 @@ describe('Bullet', () => {
     expect(bullet.y).toBe(y)
     expect(bullet.graphic).toBeDefined()
     expect(bullet.graphic.rect).
-      toHaveBeenCalledWith(0, 0, CONFIG.bullet.height, CONFIG.bullet.width)
-    expect(bullet.graphic.fill).toHaveBeenCalledWith(CONFIG.bullet.color)
+      toHaveBeenCalledWith(0, 0, CONFIG.playerBullet.height, CONFIG.playerBullet.width)
+    expect(bullet.graphic.fill).toHaveBeenCalledWith(CONFIG.playerBullet.color)
     expect(bullet.graphic.x).toBe(x)
     expect(bullet.graphic.y).toBe(y)
     expect(app.stage.addChild).toHaveBeenCalledWith(bullet.graphic)

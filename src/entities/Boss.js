@@ -2,6 +2,7 @@ import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
 import { BossHP } from '../ui/bossHP/BossHP.js'
 import { destroyEntity, getBoundCords } from '../app/utils.js'
+import { BossBullet } from './Bullet.js'
 
 export class Boss {
   constructor (app, game) {
@@ -20,6 +21,9 @@ export class Boss {
     this.app.stage.addChild(this.sprite)
 
     this.phBar = new BossHP(this.app, this, this.hp)
+
+    this.lastShotTime = 0
+    this.app.ticker.add(this.handleShooting.bind(this))
   }
 
   takeDamage () {
@@ -34,6 +38,23 @@ export class Boss {
     }
   }
 
+  shoot () {
+    new BossBullet(
+      this.app,
+      this.sprite.x - 4,
+      this.sprite.y + this.sprite.height / 2,
+      CONFIG.bossBullet
+    )
+  }
+
+  handleShooting () {
+    const currentTime = performance.now()
+    if (currentTime - this.lastShotTime > 2000) {
+      this.shoot()
+      this.lastShotTime = currentTime
+    }
+  }
+
   getBossCoords () {
     return getBoundCords(this.sprite)
   }
@@ -42,10 +63,6 @@ export class Boss {
     destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedBossShip,
       () => this.sprite = null
     )
-  }
-
-  update () {
-
   }
 
   isDead () {

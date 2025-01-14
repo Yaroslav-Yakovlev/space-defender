@@ -17,13 +17,13 @@ describe('BulletsCounter', () => {
     expect(bulletsCounter.text.text).toBe('Bullets: 10 / 10')
   })
 
-  it('should updates the number of remaining bullets', () => {
+  it('should updates the number of remaining bullet', () => {
     bulletsCounter.update(8)
     expect(bulletsCounter.bulletsLeft).toBe(8)
     expect(bulletsCounter.text.text).toBe('Bullets: 8 / 10')
   })
 
-  it('method update should not change bullets amount', () => {
+  it('method update should not change bullet amount', () => {
     bulletsCounter.update(5)
     expect(bulletsCounter.bulletsAmount).toBe(10)
   })

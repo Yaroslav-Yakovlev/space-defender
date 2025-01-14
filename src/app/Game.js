@@ -236,10 +236,9 @@ export class Game {
 
   gameLoop () {
     this.ship.update()
+
     this.asteroids.forEach((a) => a.update())
     this.bullets.forEach((b) => b.update())
-
-    if (this.isBossLevel && this.boss) this.boss.update()
 
     this.checkCollisions()
     this.checkShipCollision()

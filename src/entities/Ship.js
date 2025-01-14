@@ -1,7 +1,7 @@
 import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
-import { Bullet } from './Bullet.js'
 import { destroyEntity, getBoundCords } from '../app/utils.js'
+import { PlayerBullet } from './Bullet.js'
 
 export class Ship {
   constructor (app, x, y, game) {
@@ -78,20 +78,21 @@ export class Ship {
     }
   }
 
-  isCanShoot () {
+  canShoot () {
     return !this.canShot || this.game.bulletsLeft <= 0 || !this.sprite
   }
 
   shoot () {
-    if (this.isCanShoot()) return
+    if (this.canShoot()) return
     this.canShot = false
 
-    setTimeout(() => (this.canShot = true), 300)
+    setTimeout(() => (this.canShot = true), 500)
 
-    const bullet = new Bullet(
+    const bullet = new PlayerBullet(
       this.app,
       this.sprite.x - 4,
-      this.sprite.y - (this.sprite.height / 2) - 12
+      this.sprite.y - (this.sprite.height / 2) - 12,
+      CONFIG.playerBullet
     )
 
     this.game.handleBulletFire(bullet)
