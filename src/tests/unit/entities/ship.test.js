@@ -1,7 +1,10 @@
 import { beforeEach, describe, it, jest, expect } from '@jest/globals'
 import { Application } from 'pixi.js'
 import { Ship } from '../../../entities/Ship.js'
-import { Bullet } from '../../../entities/Bullet.js'
+import { PlayerBullet } from '../../../entities/Bullet.js'
+import { CONFIG } from '../../../app/config.js'
+
+jest.useFakeTimers()
 
 describe('Ship', () => {
   let app
@@ -40,11 +43,12 @@ describe('Ship', () => {
   })
 
   it('should shoot a bullet', () => {
+    jest.advanceTimersByTime(CONFIG.game.playerBulletsInterval + 1)
     ship.canShot = true
     ship.shoot()
 
     expect(mockGame.handleBulletFire).toHaveBeenCalled()
-    expect(Bullet).toBeDefined()
+    expect(PlayerBullet).toBeDefined()
   })
 
   it('should update position and rotation when the ship moving left', () => {
@@ -63,8 +67,9 @@ describe('Ship', () => {
     expect(ship.sprite.rotation).toBeGreaterThan(0)
   })
 
-  it('should destroy the ship', () => {
+  it('should destroy the ship',() => {
     ship.destroy()
+    jest.advanceTimersByTime(501)
     expect(ship.sprite).toBeNull()
   })
 

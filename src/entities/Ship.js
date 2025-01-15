@@ -1,7 +1,7 @@
 import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
-import { Bullet } from './Bullet.js'
-import { fadeOutAndRemoveSprite, getBoundCords } from '../app/utils.js'
+import { destroyEntity, getBoundCords } from '../app/utils.js'
+import { PlayerBullet } from './Bullet.js'
 
 export class Ship {
   constructor (app, x, y, game) {
@@ -12,6 +12,8 @@ export class Ship {
     this.speed = CONFIG.shipParams.speed
     this.canShot = true
     this.bulletsAmount = CONFIG.shipParams.bulletsAmount
+    this.playerBulletsInterval = CONFIG.game.playerBulletsInterval
+    this.lastShotTime = 0
 
     this.sprite = new Sprite(Assets.get(CONFIG.assets.ship))
     this.sprite.width = CONFIG.shipParams.width
@@ -78,23 +80,24 @@ export class Ship {
     }
   }
 
-  isCanShoot () {
-    return !this.canShot || this.game.bulletsLeft <= 0 || !this.sprite
+  canShoot () {
+    return this.game.bulletsLeft <= 0 || !this.sprite
   }
 
   shoot () {
-    if (this.isCanShoot()) return
-    this.canShot = false
+    if (this.canShoot()) return
 
-    setTimeout(() => (this.canShot = true), 300)
-
-    const bullet = new Bullet(
-      this.app,
-      this.sprite.x - 4,
-      this.sprite.y - (this.sprite.height / 2) - 12
-    )
-
-    this.game.handleBulletFire(bullet)
+    const currentTime = performance.now()
+    if (currentTime - this.lastShotTime > this.playerBulletsInterval) {
+      const bullet = new PlayerBullet(
+        this.app,
+        this.sprite.x - 4,
+        this.sprite.y - (this.sprite.height / 2) - 12,
+        CONFIG.playerBullet
+      )
+      this.game.handleBulletFire(bullet)
+    }
+    this.lastShotTime = currentTime
   }
 
   getShipCords () {
@@ -103,9 +106,7 @@ export class Ship {
 
   destroy () {
     this.removeControllers()
-    this.sprite.texture = Assets.get(CONFIG.assets.destroyedShip)
-
-    fadeOutAndRemoveSprite(this.sprite, this.app)
-    this.sprite = null
+    destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedShip,
+      () => this.sprite = null)
   }
 }
