@@ -117,17 +117,16 @@ export class Game {
   }
 
   showGameResultMessage () {
-    if (this.isBossLevel) return
     this.showCursor()
     this.isGameRunning = false
     let resultText = CONFIG.resultMessage.messageText[this.gameResultMessage]
 
-    new ResultMessage(this.app, resultText)
-    new Button(this.app, resultText, this)
-
-    setTimeout(() => {
-      this.app.ticker.stop()
-    }, 100)
+    if (this.isBossLevel) {
+      new ResultMessage(this.app, resultText)
+    } else {
+      new ResultMessage(this.app, resultText)
+      new Button(this.app, resultText, this)
+    }
   }
 
   loadShip () {
@@ -158,10 +157,10 @@ export class Game {
     const currentTime = performance.now()
 
     if (currentTime - this.lastAsteroidSpawnTime > this.asteroidsInterval) {
-      if(this.asteroids.length < this.asteroidAmound) {
+      if (this.asteroids.length < this.asteroidAmound) {
         this.asteroids.push(new Asteroid(this.app, this))
       }
-    this.lastAsteroidSpawnTime = currentTime
+      this.lastAsteroidSpawnTime = currentTime
     }
   }
 
@@ -233,6 +232,8 @@ export class Game {
     this.bullets.forEach((b) => b.update())
 
     this.asteroidSpawner()
+
+    if (this.isBossLevel) this.boss.update()
 
     this.checkCollisions()
     this.checkShipCollision()

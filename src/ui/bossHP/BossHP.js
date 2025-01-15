@@ -2,7 +2,7 @@ import { Assets, Container, Sprite } from 'pixi.js'
 import { CONFIG } from '../../app/config.js'
 
 export class BossHP {
-  constructor(app, boss, maxHP = 4) {
+  constructor (app, boss, maxHP) {
     this.app = app
     this.boss = boss
     this.maxHP = maxHP
@@ -17,23 +17,32 @@ export class BossHP {
       this.hpIcons.addChild(hpIcon)
     }
 
-    this.hpIcons.x = this.boss.sprite.x - this.hpIcons.width / 2
-    this.hpIcons.y = this.boss.sprite.y - 85
-
+    this.updatePosition()
     this.app.stage.addChild(this.hpIcons)
   }
 
-  updateHP(newHP) {
+  updateHP (newHP) {
     this.currentHP = newHP
+
+    if (this.hpIcons.children.length === 0) return
+
     this.hpIcons.children.forEach((icon, index) => {
       icon.visible = index < this.currentHP
     })
+  }
 
-    this.hpIcons.x = this.boss.sprite.x - this.hpIcons.width / 2
-    this.hpIcons.y = this.boss.sprite.y - 85
+  updatePosition () {
+    const sprite = this.boss.sprite
+    if (sprite) {
+      this.hpIcons.x = sprite.x - this.hpIcons.width / 2
+      this.hpIcons.y = sprite.height / 2 - 45
+    }
   }
 
   destroy () {
-    this.hpIcons.destroy({ children: true })
+    if (this.hpIcons) {
+      this.hpIcons.destroy({ children: true })
+      this.hpIcons = null
+    }
   }
 }
