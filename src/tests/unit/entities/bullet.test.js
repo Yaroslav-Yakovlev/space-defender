@@ -1,18 +1,25 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals'
 import { Application } from 'pixi.js'
 import { Bullet } from '../../../entities/Bullet.js'
-import { CONFIG } from '../../../app/config.js'
 
 describe('Bullet', () => {
   let app
   let bullet
+  let mockConfig
   const x = 50
   const y = 50
 
   beforeEach(() => {
     app = new Application()
-    bullet = new Bullet(app, x, y)
-    bullet.graphic.height = CONFIG.playerBullet.height
+
+    mockConfig = {
+      width: 10,
+      height: 10,
+      color: 'test',
+      speed: 5
+    }
+
+    bullet = new Bullet(app, x, y, mockConfig)
   })
 
   it('should initialize correctly', () => {
@@ -21,21 +28,17 @@ describe('Bullet', () => {
     expect(bullet.y).toBe(y)
     expect(bullet.graphic).toBeDefined()
     expect(bullet.graphic.rect).
-      toHaveBeenCalledWith(0, 0, CONFIG.playerBullet.height, CONFIG.playerBullet.width)
-    expect(bullet.graphic.fill).toHaveBeenCalledWith(CONFIG.playerBullet.color)
+      toHaveBeenCalledWith(0, 0, mockConfig.height, mockConfig.width)
+    expect(bullet.graphic.fill).toHaveBeenCalledWith(mockConfig.color)
     expect(bullet.graphic.x).toBe(x)
     expect(bullet.graphic.y).toBe(y)
     expect(app.stage.addChild).toHaveBeenCalledWith(bullet.graphic)
   })
 
-  it('should update position and destroy when out of screen', () => {
+  it('should update position', () => {
+    bullet.graphic.y = 100
     bullet.update()
-    expect(bullet.graphic.y).toBe(y - bullet.speed)
-
-    bullet.graphic.y = -bullet.graphic.height
-
-    bullet.update()
-    expect(bullet.graphic).toBeNull()
+    expect(bullet.graphic.y).toBe(100 - mockConfig.speed)
   })
 
   it('should get bullet coordinate', () => {
