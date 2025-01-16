@@ -9,15 +9,15 @@ export class Ship {
     this.game = game
     this.moveLeft = false
     this.moveRight = false
-    this.speed = CONFIG.shipParams.speed
+    this.speed = CONFIG.PlayerShipParams.speed
     this.canShot = true
-    this.bulletsAmount = CONFIG.shipParams.bulletsAmount
+    this.bulletsAmount = CONFIG.PlayerShipParams.bulletsAmount
     this.playerBulletsInterval = CONFIG.game.playerBulletsInterval
     this.lastShotTime = 0
 
     this.sprite = new Sprite(Assets.get(CONFIG.assets.ship))
-    this.sprite.width = CONFIG.shipParams.width
-    this.sprite.height = CONFIG.shipParams.height
+    this.sprite.width = CONFIG.PlayerShipParams.width
+    this.sprite.height = CONFIG.PlayerShipParams.height
     this.sprite.x = x
     this.sprite.y = y
     this.sprite.anchor.set(0.5)
@@ -60,8 +60,8 @@ export class Ship {
 
   update () {
     if (!this.sprite) return
-    const maxRotation = CONFIG.shipParams.maxRotation
-    const rotationSpeed = CONFIG.shipParams.rotationSpeed
+    const maxRotation = CONFIG.PlayerShipParams.maxRotation
+    const rotationSpeed = CONFIG.PlayerShipParams.rotationSpeed
 
     if (!this.moveLeft && !this.moveRight) this.sprite.rotation = 0
 
