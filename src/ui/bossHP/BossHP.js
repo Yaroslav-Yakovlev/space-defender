@@ -11,9 +11,9 @@ export class BossHP {
 
     for (let i = 0; i < this.maxHP; i++) {
       const hpIcon = new Sprite(Assets.get(CONFIG.assets.bossHP))
-      hpIcon.width = 20
-      hpIcon.height = 20
-      hpIcon.x = i * 20
+      hpIcon.width = CONFIG.bossHP.width
+      hpIcon.height = CONFIG.bossHP.height
+      hpIcon.x = i * CONFIG.bossHP.x
       this.hpIcons.addChild(hpIcon)
     }
 
