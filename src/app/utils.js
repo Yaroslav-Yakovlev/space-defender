@@ -39,3 +39,16 @@ export function destroyEntity (sprite, app, destroyedTexture, onRemove) {
     if (onRemove) onRemove()
   }, 500)
 }
+
+export function fadeIn (app, target, speed = 0.06) {
+  if (!target) return
+
+  const ticker = app.ticker.add(() => {
+    if (target.alpha < 1) {
+      target.alpha += speed
+    } else {
+      target.alpha = 1
+      app.ticker.remove(ticker)
+    }
+  })
+}

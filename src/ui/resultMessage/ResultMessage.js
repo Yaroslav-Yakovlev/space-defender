@@ -1,6 +1,7 @@
 import { Container, Graphics, Text } from 'pixi.js'
 import { resultMessageStyle } from './resultMessageStyle.js'
 import { CONFIG } from '../../app/config.js'
+import { fadeIn } from '../../app/utils.js'
 
 export class ResultMessage {
   constructor (app, messageText) {
@@ -8,10 +9,12 @@ export class ResultMessage {
     this.messageText = messageText
 
     this.createContainer()
+    fadeIn(this.app, this.container)
   }
 
   createContainer () {
     this.container = new Container()
+    this.container.alpha = 0
 
     this.container.addChild(this.createBorder())
     this.container.addChild(this.createText())
