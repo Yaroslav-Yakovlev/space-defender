@@ -1,6 +1,7 @@
 import { Assets, Container, Sprite, Text } from 'pixi.js'
 import { buttonStyle } from './buttonStyle.js'
 import { CONFIG } from '../../app/config.js'
+import { fadeIn } from '../../app/utils.js'
 
 export class Button {
   constructor (app, resultMessageText, game) {
@@ -20,7 +21,7 @@ export class Button {
 
   initButton () {
     this.container = new Container()
-
+    this.container.alpha = 0
     this.container.addChild(this.createButtonSprite())
     this.container.addChild(this.createButtonText())
 
@@ -37,6 +38,8 @@ export class Button {
     this.addKeyboardListener()
 
     this.app.stage.addChild(this.container)
+
+    fadeIn(this.app, this.container)
   }
 
   createButtonSprite () {
@@ -99,6 +102,7 @@ export class Button {
   }
 
   animationButton (callback) {
+    if (!this.container) return
     this.app.ticker.start()
 
     let scaleSpeed = 0.09

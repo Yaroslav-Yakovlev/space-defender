@@ -83,7 +83,6 @@ export class Game {
 
     this.desrtoyedAsteroids = 0
     this.gameResultMessage = ''
-    this.isGameRunning = false
 
     this.app.stage.removeChildren()
     this.loadBackground()
