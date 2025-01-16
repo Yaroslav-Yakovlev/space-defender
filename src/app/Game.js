@@ -13,15 +13,16 @@ import { Boss } from '../entities/Boss.js'
 export class Game {
   constructor () {
     this.asteroids = []
-    this.bullets = []
+    this.playerBullets = []
+    this.bossBullets = []
     this.asteroidsInterval = CONFIG.game.asteroidsInterval
     this.asteroidAmound = CONFIG.game.asteroidAmount
-    this.bulletsLeft = CONFIG.game.bulletsAmount
-    this.bulletsAmount = CONFIG.game.bulletsAmount
+    this.playerBulletsLeft = CONFIG.game.playerBulletsAmount
+    this.bulletsAmount = CONFIG.game.playerBulletsAmount
     this.gameDuration = CONFIG.game.gameDuration
     this.desrtoyedAsteroids = 0
-    this.shipX = CONFIG.screen.width / 2
-    this.shipY = CONFIG.screen.height - CONFIG.shipParams.height
+    this.playerShipX = CONFIG.screen.width / 2
+    this.playerShipY = CONFIG.screen.height - CONFIG.PlayerShipParams.height
     this.isGameRunning = false
     this.gameResultMessage = ''
     this.isBossLevel = false
@@ -74,12 +75,14 @@ export class Game {
   resetGame () {
     if (this.timer) this.timer.reset()
     this.asteroids.forEach((asteroid) => asteroid.destroy())
-    this.bullets.forEach((bullet) => bullet.destroy())
+    this.playerBullets.forEach((bullet) => bullet.destroy())
+    this.bossBullets.forEach((bullet) => bullet.destroy())
 
     this.asteroids = []
-    this.bullets = []
+    this.playerBullets = []
+    this.bossBullets = []
 
-    this.bulletsLeft = CONFIG.game.bulletsAmount
+    this.playerBulletsLeft = CONFIG.game.playerBulletsAmount
 
     this.desrtoyedAsteroids = 0
     this.gameResultMessage = ''
@@ -104,6 +107,9 @@ export class Game {
   }
 
   loadBoss () {
+    if (this.boss) {
+      this.boss.destroy()
+    }
     this.boss = new Boss(this.app, this)
   }
 
@@ -129,9 +135,10 @@ export class Game {
   }
 
   loadShip () {
-    if (this.ship) this.ship.removeControllers()
-    this.ship = new Ship(this.app, this.shipX, this.shipY, this)
-    this.ship.setupControllers()
+    if (this.playerShip) this.playerShip.removeControllers()
+    this.playerShip = new Ship(this.app, this.playerShipX, this.playerShipY,
+      this)
+    this.playerShip.setupControllers()
   }
 
   createCountDownTimer () {
@@ -147,7 +154,7 @@ export class Game {
   }
 
   createBulletsCounter () {
-    this.bulletsCounter = new BulletsCounter(this.app, this.bulletsLeft,
+    this.bulletsCounter = new BulletsCounter(this.app, this.playerBulletsLeft,
       this.bulletsAmount)
   }
 
@@ -164,10 +171,10 @@ export class Game {
   }
 
   handleBulletFire (bullet) {
-    if (this.bulletsLeft) {
-      this.bullets.push(bullet)
-      this.bulletsLeft--
-      this.bulletsCounter.update(this.bulletsLeft)
+    if (this.playerBulletsLeft) {
+      this.playerBullets.push(bullet)
+      this.playerBulletsLeft--
+      this.bulletsCounter.update(this.playerBulletsLeft)
     }
   }
 
@@ -183,7 +190,7 @@ export class Game {
   }
 
   checkCollisions () {
-    this.bullets.forEach((bullet) => {
+    this.playerBullets.forEach((bullet) => {
       this.asteroids.forEach((asteroid) => {
         if (this.isColliding(bullet.getBulletCords(),
           asteroid.getAsteroidCords())) {
@@ -206,12 +213,40 @@ export class Game {
     }
   }
 
+  checkBulletsCollision () {
+    this.playerBullets.forEach((playerBullet) => {
+      this.bossBullets.forEach((bossBullet) => {
+        if (this.isColliding(playerBullet.getBulletCords(),
+          bossBullet.getBulletCords())) {
+          playerBullet.destroy()
+          bossBullet.destroy()
+        }
+      })
+    })
+    if (this.playerBulletsLeft === 0 && this.boss) {
+      this.endGameAndMessage('youLose')
+      this.boss.stopShooting()
+    }
+  }
+
   checkShipCollision () {
     this.asteroids.forEach((asteroid) => {
-      if (this.isColliding(this.ship.getShipCords(),
+      if (this.isColliding(this.playerShip.getShipCords(),
         asteroid.getAsteroidCords())) {
-        this.ship.destroy()
+        this.playerShip.destroy()
 
+        this.endGameAndMessage('youLose')
+      }
+    })
+  }
+
+  checkBossBulletCollisions () {
+    this.bossBullets.forEach((bullet) => {
+      if (this.isColliding(bullet.getBulletCords(),
+        this.playerShip.getShipCords())) {
+        bullet.destroy()
+        this.playerShip.destroy()
+        this.boss.stopShooting()
         this.endGameAndMessage('youLose')
       }
     })
@@ -222,13 +257,15 @@ export class Game {
     this.timer.stop()
     this.timer.reset()
     this.showGameResultMessage()
+    this.isGameRunning = false
   }
 
   gameLoop () {
-    this.ship.update()
+    if (this.playerShip) this.playerShip.update()
 
     this.asteroids.forEach((a) => a.update())
-    this.bullets.forEach((b) => b.update())
+    this.playerBullets.forEach((b) => b.update())
+    this.bossBullets.forEach((b) => b.update())
 
     this.asteroidSpawner()
 
@@ -236,6 +273,8 @@ export class Game {
 
     this.checkCollisions()
     this.checkShipCollision()
+    this.checkBulletsCollision()
+    this.checkBossBulletCollisions()
   }
 }
 

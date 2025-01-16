@@ -26,10 +26,13 @@ export class Boss {
     this.direction = 1
     this.speed = 2
     this.lastShotTime = 0
+    this.isShooting = true
 
     this.startMoving()
 
-    this.app.ticker.add(() => this.shooting())
+    this.app.ticker.add(() => {
+      if (this.isShooting) this.shooting()
+    })
   }
 
   takeDamage () {
@@ -62,6 +65,13 @@ export class Boss {
     if (this.movementInterval) {
       clearInterval(this.movementInterval)
       this.movementInterval = null
+    }
+  }
+
+  clearShooting () {
+    if (this.shootingTicker) {
+      this.app.ticker.remove(this.shootingTicker)
+      this.shootingTicker = null
     }
   }
 
@@ -99,14 +109,21 @@ export class Boss {
 
     const currentTime = performance.now()
     if (currentTime - this.lastShotTime > this.bossBulletsInterval) {
-      new BossBullet(
+      const bullet = new BossBullet(
         this.app,
         this.sprite.x - 6,
         this.sprite.y + this.sprite.height / 2,
         CONFIG.bossBullet
       )
+      this.game.bossBullets.push(bullet)
       this.lastShotTime = currentTime
     }
+  }
+
+  stopShooting () {
+    this.isShooting = false
+    this.clearMovementInterval()
+    this.clearShooting()
   }
 
   getBossCoords () {
@@ -115,12 +132,15 @@ export class Boss {
 
   destroy () {
     this.isMoving = false
+    this.startMoving()
+    this.clearShooting()
     destroyEntity(
       this.sprite,
       this.app,
       CONFIG.assets.destroyedBossShip,
       () => this.sprite = null
     )
+    this.phBar.destroy()
     this.clearMovementInterval()
   }
 

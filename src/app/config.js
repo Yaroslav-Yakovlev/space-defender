@@ -18,7 +18,7 @@ export const CONFIG = {
     bossBulletsInterval: 2000,
     playerBulletsInterval: 500,
     asteroidAmount: 10,
-    bulletsAmount: 10,
+    playerBulletsAmount: 10,
     gameDuration: 60
   },
   resultMessage: {
@@ -51,7 +51,7 @@ export const CONFIG = {
     bossHP: bossHP,
     destroyedBossShip: destroyedBossShip
   },
-  shipParams: {
+  PlayerShipParams: {
     width: 70,
     height: 70,
     speed: 6,
