@@ -74,6 +74,7 @@ export class Game {
 
   resetGame () {
     if (this.timer) this.timer.reset()
+
     this.asteroids.forEach((asteroid) => asteroid.destroy())
     this.playerBullets.forEach((bullet) => bullet.destroy())
     this.bossBullets.forEach((bullet) => bullet.destroy())

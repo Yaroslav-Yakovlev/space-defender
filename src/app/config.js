@@ -61,7 +61,13 @@ export const CONFIG = {
   bossShipParams: {
     width: 120,
     height: 120,
-    hp: 4
+    hp: 4,
+    y: 100
+  },
+  bossHP: {
+    width: 20,
+    height: 20,
+    x: 20
   },
   playerBullet: {
     height: 8,
@@ -73,7 +79,7 @@ export const CONFIG = {
     height: 12,
     width: 20,
     color: 0xFF0000,
-    speed: 12
+    speed: 10
   },
   asteroidParams: {
     height: 80,

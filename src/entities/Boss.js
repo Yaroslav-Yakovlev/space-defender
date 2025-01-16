@@ -14,8 +14,8 @@ export class Boss {
     this.sprite = new Sprite(Assets.get(CONFIG.assets.boss))
     this.sprite.width = CONFIG.bossShipParams.width
     this.sprite.height = CONFIG.bossShipParams.height
-    this.sprite.x = 500
-    this.sprite.y = 100
+    this.sprite.x = Math.random() * (1200 - 100) + 100
+    this.sprite.y = CONFIG.bossShipParams.y
     this.sprite.anchor.set(0.5)
 
     this.app.stage.addChild(this.sprite)
