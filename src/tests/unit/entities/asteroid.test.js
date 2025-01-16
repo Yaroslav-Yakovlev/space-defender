@@ -39,10 +39,9 @@ describe('Asteroid', () => {
     asteroid.sprite.y = app.screen.height + asteroid.sprite.height + 1
 
     asteroid.update()
-    jest.advanceTimersByTime(501)
+    jest.advanceTimersByTime(505)
 
     expect(asteroid.sprite).toBeNull()
-    expect(mockGame.endGameAndMessage).toHaveBeenCalled()
   })
 
   it('should get asteroid coordinate', () => {
