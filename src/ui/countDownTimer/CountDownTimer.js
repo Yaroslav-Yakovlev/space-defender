@@ -41,10 +41,10 @@ export class CountDownTimer {
   reset () {
     this.stop()
     this.remainingTime = this.initialDuration
-    this.timerText.text = `Time left: ${this.remainingTime}`
   }
 
   stop () {
+    this.timerText.text = `Time left: ${this.remainingTime}`
     if (this.interval) {
       clearInterval(this.interval)
       this.interval = null

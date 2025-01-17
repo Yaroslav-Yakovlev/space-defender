@@ -6,8 +6,8 @@ import { fadeIn } from '../../app/utils.js'
 export class Button {
   constructor (app, resultMessageText, game) {
     this.app = app
-    this.resultMessageText = resultMessageText
     this.game = game
+    this.resultMessageText = resultMessageText
     this.isDestroyed = false
     this.initButton()
   }
