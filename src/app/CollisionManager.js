@@ -29,7 +29,7 @@ export class CollisionManager {
         }
       })
 
-      if (this.game.destroyedAsteroids === this.game.asteroidAmound) {
+      if (this.game.destroyedAsteroids === this.game.asteroidAmount) {
         this.game.endGameAndMessage('youWin')
       }
     })
