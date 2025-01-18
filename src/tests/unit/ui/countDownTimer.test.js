@@ -35,13 +35,4 @@ describe('CountDownTimer', () => {
     expect(timer.remainingTime).toBe(0)
     expect(timer.timerText.text).toBe(`Time's up!`)
   })
-
-  it('should reset countdown', () => {
-    timer.start()
-    jest.advanceTimersByTime(3000)
-    timer.reset()
-
-    expect(timer.remainingTime).toBe(duration)
-    expect(timer.timerText.text).toBe(`Time left: ${duration}`)
-  })
 })

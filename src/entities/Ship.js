@@ -81,7 +81,8 @@ export class Ship {
   }
 
   canShoot () {
-    return this.game.bulletsLeft <= 0 || !this.sprite || !this.game.isGameRunning
+    return this.game.playerBulletsLeft === 0 || !this.sprite ||
+      !this.game.isGameRunning
   }
 
   shoot () {

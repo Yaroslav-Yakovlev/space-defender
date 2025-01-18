@@ -17,7 +17,7 @@ export class Game {
     this.isGameRunning = false
     this.collisionManager = new CollisionManager(this)
     this.asteroidSpawner = new AsteroidSpawner(this)
-    this.UIManager = new UIManager(this.app,this)
+    this.UIManager = new UIManager(this.app, this)
     this.asteroidAmount = CONFIG.game.asteroidAmount
     this.playerBulletsLeft = CONFIG.game.playerBulletsAmount
     this.bulletsAmount = CONFIG.game.playerBulletsAmount
@@ -63,13 +63,17 @@ export class Game {
     this.isGameRunning = true
     this.app.stage.removeChildren()
 
+    this.initializeGameComponents()
+  }
+
+  initializeGameComponents () {
     this.loadBackground()
     this.loadShip()
     this.UIManager.createBulletsCounter()
     this.UIManager.createCountDownTimer()
   }
 
-  resetGame () {
+  clearGameState () {
     this.asteroids.forEach((asteroid) => asteroid.destroy())
     this.playerBullets.forEach((bullet) => bullet.destroy())
     this.bossBullets.forEach((bullet) => bullet.destroy())
@@ -78,12 +82,16 @@ export class Game {
     this.playerBullets = []
     this.bossBullets = []
 
-    this.playerBulletsLeft = CONFIG.game.playerBulletsAmount
+    this.app.stage.removeChildren()
 
+    this.playerBulletsLeft = CONFIG.game.playerBulletsAmount
     this.destroyedAsteroids = 0
     this.gameResultMessage = ''
+  }
 
-    this.app.stage.removeChildren()
+  resetGame () {
+    this.clearGameState()
+
     this.loadBackground()
     this.createStartButton()
   }
@@ -92,14 +100,17 @@ export class Game {
     this.resetGame()
     this.hideCursor()
 
-    this.loadBackground()
+    this.initializeGameComponents()
     this.loadBoss()
-    this.loadShip()
-    this.UIManager.createBulletsCounter()
-    this.UIManager.createCountDownTimer()
 
     this.isGameRunning = true
     this.isBossLevel = true
+  }
+
+  restartBossLevel () {
+    this.clearGameState()
+    this.isBossLevel = true
+    this.levelWithBoss()
   }
 
   loadBoss () {
@@ -142,14 +153,12 @@ export class Game {
     if (this.playerShip) this.playerShip.update()
 
     this.collisionManager.update()
+    this.asteroidSpawner.update()
+    if (this.isBossLevel) this.boss.update()
 
     this.asteroids.forEach((a) => a.update())
     this.playerBullets.forEach((b) => b.update())
     this.bossBullets.forEach((b) => b.update())
-
-    this.asteroidSpawner.update()
-
-    if (this.isBossLevel) this.boss.update()
   }
 }
 

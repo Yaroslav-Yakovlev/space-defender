@@ -54,9 +54,10 @@ export class UIManager {
     const { app, gameResultMessage } = this.game
     this.game.showCursor()
     this.game.isGameRunning = false
+
     let resultText = CONFIG.resultMessage.messageText[gameResultMessage]
 
-    if (this.game.isBossLevel) {
+    if (this.game.isBossLevel && this.game.boss.isDead()) {
       new ResultMessage(app, resultText)
     } else {
       new ResultMessage(app, resultText)

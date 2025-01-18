@@ -139,7 +139,7 @@ export class Boss {
       this.sprite,
       this.app,
       CONFIG.assets.destroyedBossShip,
-      () => this.sprite = null
+      this.sprite = null
     )
     this.phBar.destroy()
     this.clearMovementInterval()
