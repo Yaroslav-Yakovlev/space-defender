@@ -32,6 +32,8 @@ export class BossHP {
   }
 
   updatePosition () {
+    if (!this.hpIcons) return
+
     const sprite = this.boss.sprite
     if (sprite) {
       this.hpIcons.x = sprite.x - this.hpIcons.width / 2

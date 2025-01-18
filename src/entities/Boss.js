@@ -134,6 +134,7 @@ export class Boss {
     this.isMoving = false
     this.startMoving()
     this.clearShooting()
+
     destroyEntity(
       this.sprite,
       this.app,
