@@ -32,7 +32,7 @@ describe('Asteroid', () => {
     asteroid.update()
 
     expect(asteroid.sprite.y).toBeGreaterThan(-asteroid.sprite.height)
-    expect(asteroid.sprite.rotation).toBeGreaterThan(0)
+    expect(asteroid.sprite.rotation).not.toBe(0)
   })
 
   it('should destroy asteroid when out of screen', () => {

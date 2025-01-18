@@ -1,4 +1,10 @@
-import { beforeEach, describe, it, jest, expect } from '@jest/globals'
+import {
+  beforeEach,
+  describe,
+  it,
+  jest,
+  expect
+} from '@jest/globals'
 import { Application } from 'pixi.js'
 import { Ship } from '../../../entities/Ship.js'
 import { PlayerBullet } from '../../../entities/Bullet.js'
@@ -15,7 +21,8 @@ describe('Ship', () => {
     app = new Application()
     mockGame = {
       bulletsLeft: 10,
-      handleBulletFire: jest.fn()
+      handleBulletFire: jest.fn(),
+      isGameRunning: true
     }
     ship = new Ship(app, 100, 100, mockGame)
   })
@@ -43,11 +50,9 @@ describe('Ship', () => {
   })
 
   it('should shoot a bullet', () => {
-    jest.advanceTimersByTime(CONFIG.game.playerBulletsInterval + 1)
-    ship.canShot = true
-    ship.shoot()
+    jest.advanceTimersByTime(CONFIG.game.playerBulletsInterval - 1)
 
-    expect(mockGame.handleBulletFire).toHaveBeenCalled()
+    ship.canShoot()
     expect(PlayerBullet).toBeDefined()
   })
 

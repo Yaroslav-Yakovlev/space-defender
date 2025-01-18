@@ -6,8 +6,8 @@ import { fadeIn } from '../../app/utils.js'
 export class Button {
   constructor (app, resultMessageText, game) {
     this.app = app
-    this.resultMessageText = resultMessageText
     this.game = game
+    this.resultMessageText = resultMessageText
     this.isDestroyed = false
     this.initButton()
   }
@@ -56,7 +56,8 @@ export class Button {
       [CONFIG.resultMessage.messageText.youWin]: CONFIG.button.nextLevelText
     }
 
-    const textContent = textMap[this.resultMessageText] || this.resultMessageText
+    const textContent = textMap[this.resultMessageText] ||
+      this.resultMessageText
 
     const buttonText = new Text({ text: textContent, style: buttonStyle })
     buttonText.anchor.set(0.5)
@@ -122,8 +123,13 @@ export class Button {
 
   handleGameAction () {
     if (this.resultMessageText === CONFIG.resultMessage.messageText.youLose) {
-      this.game.resetGame()
-    } else if (this.resultMessageText === CONFIG.resultMessage.messageText.youWin) {
+      if (this.game.isBossLevel) {
+        this.game.restartBossLevel()
+      } else {
+        this.game.resetGame()
+      }
+    } else if (this.resultMessageText ===
+      CONFIG.resultMessage.messageText.youWin) {
       this.game.levelWithBoss()
     } else {
       this.game.startGame()

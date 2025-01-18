@@ -134,11 +134,12 @@ export class Boss {
     this.isMoving = false
     this.startMoving()
     this.clearShooting()
+
     destroyEntity(
       this.sprite,
       this.app,
       CONFIG.assets.destroyedBossShip,
-      () => this.sprite = null
+      this.sprite = null
     )
     this.phBar.destroy()
     this.clearMovementInterval()
