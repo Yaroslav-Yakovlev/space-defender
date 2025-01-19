@@ -31,55 +31,69 @@ export class Ship {
 
   setupControllers () {
     if (this.keydownHandler) return
-    this.keydownHandler = (event) => {
-      if (event.code === 'ArrowLeft') {
-        this.moveLeft = true
-        this.moveRight = false
-      }
-      if (event.code === 'ArrowRight') {
-        this.moveRight = true
-        this.moveLeft = false
-      }
-      if (event.code === 'Space' && this.canShot) {
-        this.shoot()
-        this.canShot = false
-        setTimeout(() => (this.canShot = true), 300)
-      }
-    }
 
-    this.keyupHandler = (event) => {
-      if (event.code === 'ArrowLeft') this.moveLeft = false
-      if (event.code === 'ArrowRight') this.moveRight = false
-    }
+    this.keydownHandler = (event) => this.handleKeyDown(event)
+    this.keyupHandler = (event) => this.handleKeyUp(event)
 
     window.addEventListener('keydown', this.keydownHandler)
     window.addEventListener('keyup', this.keyupHandler)
   }
 
-  removeControllers () {
-    window.removeEventListener('keydown', this.keydownHandler)
-    window.removeEventListener('keyup', this.keyupHandler)
+  handleKeyDown (event) {
+    switch (event.code) {
+      case 'ArrowLeft':
+        this.moveLeft = true
+        this.moveRight = false
+        break
+      case 'ArrowRight':
+        this.moveRight = true
+        this.moveLeft = false
+        break
+      case 'Space':
+        if (this.canShot) {
+          this.shoot()
+          this.canShot = false
+
+          setTimeout(() => (this.canShot = true),
+            CONFIG.PlayerShipParams.shootCooldown)
+        }
+        break
+    }
+  }
+
+  handleKeyUp (event) {
+    if (event.code === 'ArrowLeft') this.moveLeft = false
+    if (event.code === 'ArrowRight') this.moveRight = false
   }
 
   update () {
     if (!this.sprite) return
-    const maxRotation = CONFIG.PlayerShipParams.maxRotation
-    const rotationSpeed = CONFIG.PlayerShipParams.rotationSpeed
 
-    if (!this.moveLeft && !this.moveRight) this.sprite.rotation = 0
+    this.updatePosition()
+    this.updateRotation()
+  }
 
+  updatePosition () {
     if (this.moveLeft) {
       this.sprite.x = Math.max(this.sprite.width / 2,
         this.sprite.x - this.speed)
-      this.sprite.rotation = Math.max(-maxRotation,
-        this.sprite.rotation - rotationSpeed)
-    }
-
-    if (this.moveRight) {
+    } else if (this.moveRight) {
       this.sprite.x = Math.min(CONFIG.screen.width - this.sprite.width / 2,
         this.sprite.x + this.speed)
+    }
+  }
+
+  updateRotation () {
+    const { maxRotation, rotationSpeed } = CONFIG.PlayerShipParams
+
+    if (this.moveLeft) {
+      this.sprite.rotation = Math.max(-maxRotation,
+        this.sprite.rotation - rotationSpeed)
+    } else if (this.moveRight) {
       this.sprite.rotation = Math.min(maxRotation,
         this.sprite.rotation + rotationSpeed)
+    } else {
+      this.sprite.rotation = 0
     }
   }
 
@@ -112,5 +126,10 @@ export class Ship {
     this.removeControllers()
     destroyEntity(this.sprite, this.app, CONFIG.assets.destroyedShip,
       () => this.sprite = null)
+  }
+
+  removeControllers () {
+    window.removeEventListener('keydown', this.keydownHandler)
+    window.removeEventListener('keyup', this.keyupHandler)
   }
 }

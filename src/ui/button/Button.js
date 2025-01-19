@@ -73,7 +73,7 @@ export class Button {
 
   addKeyboardListener () {
     this.keyHandler = (event) => {
-      if (event.key === 'Enter') this.onPointerDown()
+      if (event.code === 'Enter') this.onPointerDown()
     }
     window.addEventListener('keydown', this.keyHandler)
   }
