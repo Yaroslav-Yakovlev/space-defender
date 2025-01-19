@@ -1,6 +1,5 @@
-import { Assets, Sprite } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
-import { destroyEntity, getBoundCords } from '../app/utils.js'
+import { createSprite, destroyEntity, getBoundCords } from '../app/utils.js'
 
 export class Asteroid {
   constructor (app, game) {
@@ -9,15 +8,20 @@ export class Asteroid {
     this.rotationSpeed = CONFIG.asteroidParams.rotationSpeed
     this.speed = CONFIG.asteroidParams.getAsteroidSpeed()
 
-    this.sprite = new Sprite(Assets.get(CONFIG.assets.asteroid))
-    this.sprite.width = CONFIG.asteroidParams.width
-    this.sprite.height = CONFIG.asteroidParams.height
-    this.sprite.x = Math.random() * (CONFIG.screen.width - this.sprite.width) +
-      this.sprite.width / 2
-    this.sprite.y = -this.sprite.height
-    this.sprite.anchor.set(0.5)
+    const width = CONFIG.asteroidParams.width
+    const height = CONFIG.asteroidParams.height
+    const x = Math.random() * (CONFIG.screen.width - width) + width / 2
+    const y = -height
 
-    this.app.stage.addChild(this.sprite)
+    this.sprite = createSprite({
+      textureKey: CONFIG.assets.asteroid,
+      x,
+      y,
+      width,
+      height,
+      anchorSet: 0.5,
+      app: this.app
+    })
   }
 
   update () {
