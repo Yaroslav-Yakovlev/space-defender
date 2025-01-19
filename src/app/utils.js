@@ -1,4 +1,4 @@
-import { Assets } from 'pixi.js'
+import { Assets, Sprite } from 'pixi.js'
 
 export function fadeOutAndRemoveSprite (sprite, app) {
   if (!sprite) return
@@ -15,6 +15,19 @@ export function fadeOutAndRemoveSprite (sprite, app) {
   }
 
   app.ticker.add(fadeTicker)
+}
+
+export function fadeIn (app, target, speed = 0.06) {
+  if (!target) return
+
+  const ticker = app.ticker.add(() => {
+    if (target.alpha < 1) {
+      target.alpha += speed
+    } else {
+      target.alpha = 1
+      app.ticker.remove(ticker)
+    }
+  })
 }
 
 export function getBoundCords (sprite) {
@@ -40,15 +53,27 @@ export function destroyEntity (sprite, app, destroyedTexture, onRemove) {
   }, 500)
 }
 
-export function fadeIn (app, target, speed = 0.06) {
-  if (!target) return
+export function createSprite ({
+  textureKey,
+  width,
+  height,
+  x,
+  y,
+  anchorSet = 0.5,
+  app = null
+}) {
+  const texture = Assets.get(textureKey)
+  const sprite = new Sprite(texture)
 
-  const ticker = app.ticker.add(() => {
-    if (target.alpha < 1) {
-      target.alpha += speed
-    } else {
-      target.alpha = 1
-      app.ticker.remove(ticker)
-    }
-  })
+  sprite.x = x
+  sprite.y = y
+  sprite.width = width
+  sprite.height = height
+  sprite.anchor.set(anchorSet)
+
+  if (app) {
+    app.stage.addChild(sprite)
+  }
+
+  return sprite
 }

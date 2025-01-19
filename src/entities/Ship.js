@@ -1,12 +1,13 @@
-import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
-import { destroyEntity, getBoundCords } from '../app/utils.js'
+import { createSprite, destroyEntity, getBoundCords } from '../app/utils.js'
 import { PlayerBullet } from './Bullet.js'
 
 export class Ship {
   constructor (app, x, y, game) {
     this.app = app
     this.game = game
+    this.x = x
+    this.y = y
     this.moveLeft = false
     this.moveRight = false
     this.speed = CONFIG.PlayerShipParams.speed
@@ -15,13 +16,15 @@ export class Ship {
     this.playerBulletsInterval = CONFIG.game.playerBulletsInterval
     this.lastShotTime = 0
 
-    this.sprite = new Sprite(Assets.get(CONFIG.assets.ship))
-    this.sprite.width = CONFIG.PlayerShipParams.width
-    this.sprite.height = CONFIG.PlayerShipParams.height
-    this.sprite.x = x
-    this.sprite.y = y
-    this.sprite.anchor.set(0.5)
-    this.app.stage.addChild(this.sprite)
+    this.sprite = createSprite({
+      textureKey: CONFIG.assets.ship,
+      x,
+      y,
+      width: CONFIG.PlayerShipParams.width,
+      height: CONFIG.PlayerShipParams.height,
+      anchorSet: 0.5,
+      app: this.app
+    })
 
     this.setupControllers()
   }

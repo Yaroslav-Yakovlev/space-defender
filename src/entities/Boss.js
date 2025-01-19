@@ -1,7 +1,6 @@
-import { Sprite, Assets } from 'pixi.js'
 import { CONFIG } from '../app/config.js'
 import { BossHP } from '../ui/bossHP/BossHP.js'
-import { destroyEntity, getBoundCords } from '../app/utils.js'
+import { createSprite, destroyEntity, getBoundCords } from '../app/utils.js'
 import { BossBullet } from './Bullet.js'
 
 export class Boss {
@@ -11,14 +10,17 @@ export class Boss {
     this.hp = CONFIG.bossShipParams.hp
     this.bossBulletsInterval = CONFIG.game.bossBulletsInterval
 
-    this.sprite = new Sprite(Assets.get(CONFIG.assets.boss))
-    this.sprite.width = CONFIG.bossShipParams.width
-    this.sprite.height = CONFIG.bossShipParams.height
-    this.sprite.x = Math.random() * (1200 - 100) + 100
-    this.sprite.y = CONFIG.bossShipParams.y
-    this.sprite.anchor.set(0.5)
+    const x =  Math.random() * (1200 - 100) + 100
 
-    this.app.stage.addChild(this.sprite)
+    this.sprite = createSprite({
+      textureKey: CONFIG.assets.boss,
+      x,
+      y: CONFIG.bossShipParams.y,
+      width: CONFIG.bossShipParams.width,
+      height: CONFIG.bossShipParams.height,
+      anchorSet: 0.5,
+      app: this.app
+    })
 
     this.phBar = new BossHP(this.app, this, this.hp)
 
