@@ -56,7 +56,8 @@ export const CONFIG = {
     height: 70,
     speed: 6,
     maxRotation: 0.2,
-    rotationSpeed: 0.05
+    rotationSpeed: 0.05,
+    shootCooldown: 300
   },
   bossShipParams: {
     width: 120,
