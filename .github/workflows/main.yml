@@ -1,4 +1,4 @@
-name: CI
+name: CI and Deploy
 
 on:
   push:
@@ -29,6 +29,30 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name : Test
+      - name: Test
         run: npm run test
-        
+deploy:
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/main'
+
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build project
+      run: npm run build
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+
