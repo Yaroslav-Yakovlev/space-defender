@@ -8,7 +8,7 @@ export default {
   output: {
     filename: 'bundle.js',
     path: path.resolve('dist'),
-    publicPath: ''
+    publicPath: '/space-defender/'
   },
   devServer: {
     static: [
@@ -28,7 +28,7 @@ export default {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
@@ -37,9 +37,9 @@ export default {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './public/index.html'
-    })
+    }),
+    new CleanWebpackPlugin(),
   ]
 }
