@@ -1,14 +1,17 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
+import Dotenv from 'dotenv-webpack'
+
+const isProduction = process.env.NODE_ENV === 'production'
 
 export default {
-  mode: 'development',
+  mode: isProduction ? 'production' : 'development',
   entry: './src/index.js',
   output: {
     filename: 'bundle.js',
     path: path.resolve('dist'),
-    publicPath: '/space-defender/'
+    publicPath: isProduction ? '/space-defender/' : '/'
   },
   devServer: {
     static: [
@@ -22,13 +25,14 @@ export default {
       }
     ],
     open: true,
-    port: 3000
+    port: 3000,
+    historyApiFallback: true
   },
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader']
       },
       {
         test: /\.(png|jpe?g|gif|svg)$/i,
@@ -38,8 +42,12 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './public/index.html'
+      template: './public/index.html',
+      templateParameters: {
+        PUBLIC_PATH: process.env.PUBLIC_PATH || '/'
+      }
     }),
     new CleanWebpackPlugin(),
+    new Dotenv()
   ]
 }
